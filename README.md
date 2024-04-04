@@ -31,10 +31,55 @@
 Вузовская наука<br/>
 Как искать себе научного руководителя<br/>
 <td><a href="https://github.com/itsecd/academic-fundamentals/blob/main/lectures/lecture01-academic-work-structure.pdf">Презентация</a></td>
-<td></td>
+<td><a href="https://youtu.be/tBHvD__szDU">Видео 1 (2023)</a> | <a href="https://youtu.be/ad5zWnXBLCM">Видео 2 (2023)</a></td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Содержание и этапы научного исследования<br/>
+Журналы и конференции<br/>
+Где искать литературу<br/>
+<td><a href="https://github.com/itsecd/academic-fundamentals/blob/main/lectures/lecture02-research-stages-and-literature.pdf">Презентация</a></td>
+<td><a href="https://youtu.be/gL98OpeDjEg">Видео 1 (2023)</a> | <a href="https://youtu.be/wUoiDHKT3Lk">Видео 2 (2023)</a></td>
 </tr>
 
 </table>
+
+### Лекции по LaTeX
+
+<table>
+<tr>
+<th>№</th>
+<th>Тема</th>
+<th>Презентация</th>
+<th>Видеозапись</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>Основы LaTeX<br/>
+Структура документа. Пакеты<br/>
+Списки и таблицы</td>
+<td>
+<a href="https://github.com/itsecd/academic-fundamentals/blob/main/lectures/lecture-latex1.tex">Пример документа - TeX</a><br/>
+<a href="https://github.com/itsecd/academic-fundamentals/blob/main/lectures/lecture-latex1.pdf">Пример документа - PDF</a>
+</td>
+<td><a href="https://youtu.be/A8JqEQ8TWOM">Видео</a>
+</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Презентации Beamer</td>
+<td>
+</td>
+<td><a href="https://youtu.be/ckOV0kzwBdo">Видео</a>
+</td>
+</tr>
+
+</table>
+
+
 
 ## Лабораторные работы
 
@@ -101,8 +146,8 @@
 
 <tr>
 <td>3 базовая часть</td>
-<td>Занятие 4</td>
 <td>Занятие 5</td>
+<td>Занятие 6</td>
 </tr>
 
 <tr>
