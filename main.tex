@@ -1,0 +1,188 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LaTeX Template ~ 'tau.tex'
+% Version 2.3 (05/04/2024)
+%
+% Author: 
+% Guillermo Jimenez (memo.notess1@gmail.com)
+% 
+% License:
+% Creative Commons CC BY 4.0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     BIBLIOGRAPHY WITH BIBLATEX IN EXTERNAL EDITORS:
+% If the bibliography does not show up, try running the 
+% 'tau.cls' and 'tau.bib' file with biber from the 
+% MikTeX console or your preferred LaTeX distribution to 
+% generate the .aux files and (re)run tau.tex.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[9pt,a4paper,twoside]{tau}
+% \usepackage[spanish,es-nodecimaldot,es-noindentfirst]{babel}
+\usepackage[english]{babel}
+\usepackage{tau}
+
+%----------------------------------------------------------
+% Title
+%----------------------------------------------------------
+
+\title{Using the tau \LaTeX\ class to write an academic article or lab report}
+
+%----------------------------------------------------------
+% Authors, affiliations and professor
+%----------------------------------------------------------
+
+\author[a,1]{Author 1}
+\author[b,2]{Author 2}
+\author[b,c,3]{Author 3}
+
+%----------------------------------------------------------
+
+\affil[a]{Affiliation of author one}
+\affil[b]{Affiliation of author two}
+\affil[c]{Affiliation of author three}
+
+\professor{Responsible/Authority or other information}
+
+%----------------------------------------------------------
+% Footpage notes
+%----------------------------------------------------------
+
+\institution{College name}
+\ftitle{Writing in \LaTeX}
+\date{April 05, 2024}
+\etal{Author last name et al.}
+\course{\LaTeX\ Template}
+
+
+
+\begin{document}
+	
+    \maketitle
+    \thispagestyle{firststyle}
+    \tableofcontents
+
+%----------------------------------------------------------
+
+   \section{Results and Applications}
+\subsection{3D Point Cloud Object Classification}
+{The performance analysis of the dataset for object classification problem is showcased by
+using the state-of-the-art models namely, PointNet [20], PointNet++ [22] and SO-Net [14]. These three models directly
+work on unstructured point cloud datasets. They learn the global point cloud features that have been shown to classify
+forty man-made objects of the ModelNet40 [38] shape classification benchmark. The 3D point cloud dataset is comprised
+of a variety of outdoor areas (i.e. university campus and city centre) with structures of facades, roads, door, windows
+and trees as shown in Figure ~\eqref{fig:figure}. In order to study the classification accuracy on the three CNN-based models, a dataset
+of 3982 objects of 5 classes (i.e. doors, windows, facades, roofs and trees) is gathered. To evaluate the three models,
+the dataset is split into a ratio of 80 : 20 for training and testing respectively. While training, for each sample,
+points on mesh faces are uniformly sampled according to the face area and normalised into a unit sphere (i.e. -1 to
++1). Additionally, data augmentation techniques are applied on-the-fly by randomly rotating the object along the
+up-axis and jittering the position of each point by Gaussian noise with zero mean and 0.02 standard deviation. Each
+model is trained for 100 epochs. In Table ~\eqref{tab:table} , the performance of the three trained models in a different point cloud
+input setting using the Overall and Average class accuracy (as used in [20, 22]) is shown. It is observed that with an
+increase in the number of points per objects, the performance of the three models increases. Amongst all the three
+networks, the So-Net architecture performs the best. This is in consistence with the results in [14]. However, there is
+still a huge potential in the improvement of the performance scores. This is primarily because dataset is challenging
+in terms of structural similarity of outdoor objects in the point cloud space namely, facades, door and windows.}
+ \begin{table}[H]
+                \centering
+                \caption{Overall and Avg. class classification scores using the state-of-the-art models on the dataset.
+}
+    		\label{tab:table}
+                \begin{tabular}{|c|c|c|c|c|}
+                \toprule
+                & \multicolumn{2}{|c|}{PointNet[20]} & \multicolumn{2}{|c|}{PointNet++[22]} \\
+                \hline
+                Points & Avg.Class & Overall & Avg.Class & Overall \\
+                \hline
+                512 & 24.17 & 35.17 & 39.47 & 45.56  \\
+                \hline
+                1024 & 38.84 & 50.13 & 44.65 & 62.91  \\
+                \hline
+                2048 & 46.77 & 59.68 & 49.23 & 63.42 \\
+                \hline
+                4096 & 48.77 & 60.68 & 51.23 & 64.42  \\
+                \hline
+                \end{tabular}
+                    
+                    
+            \end{table}
+    
+\subsection[Image{}-based 3D Reconstruction]{Image-based 3D Reconstruction}
+{In order to carry out the experiment, the complete reconstruction pipeline is evaluated as per
+[11]. This is because the ground truth for the camera positions to specifically evaluate the camera poses from an SfM
+algorithm are not available, only the GPS position is known. The open-source software selected for the reconstruction
+is COLMAP (SfM [26] and MVS [28]), since it is reported as the most successful in different scenarios in the latest
+comparisons carried out (see Section 2). }Furthermore, it has advantages over other methods [4, 18]
+because
+
+
+
+
+
+			
+	       \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.8\columnwidth]{a0000-img001.png}
+                \includegraphics[width=0.8\columnwidth]{a0000-img002.png}
+                \caption{On the left, the area of the city covered by the tiles in the comparison (in green).
+On the right, a comparison of the number of points and the mean accuracy per tile}
+                \label{fig:figure}
+            \end{figure}
+
+{it gives the possibility of handling a large amount of data without running out of memory. In
+this experiment, COLMAP is applied with the same configuration to each set of images and as a result, two dense point
+clouds are obtained. The configuration includes, apart from the default parameters, using a single camera per flight
+path and the vocabulary tree method [27] for feature matching. This was selected because it
+is the recommend mode for large image collections (several thousands). Moreover, as in COLMAP there is no option
+implemented to enforce GPS priors during SfM computation, we follow the recommendation of applying the geo-registration
+after obtaining the sparse point cloud.}
+
+{As pointed out in [11], the mean distance between the point clouds can be affected by
+outliers. Hence, they propose to use the following measurements for further study: precision, recall, and F score ~\eqref{ec:equationnn} The
+precision, P, shows the accuracy of the reconstruction, the recall, R, is related to how complete the reconstruction
+is, and the F score, F, is a combination of both. They are defined in Eq. for a given threshold distance d. In the
+equations, I is the image-based reconstruction point cloud, G is the ground truth point cloud, {\textbar} $\cdot $
+{\textbar} is the cardinality, $\mathit{dist}_{I\rightarrow G}\left(d\right)$ ~\eqref{ec:equation} are the points in I with a distance to G less than d and $\mathit{dist}_{G\rightarrow I}\left(d\right)$ ~\eqref{ec:equationn} is
+analogous (i.e. $\mathit{dist}_{A\rightarrow B}\left(d\right)$ = \{a ${\in}$ A {\textbar} min b${\in}$B ka$-$bk2 {\textless} d\}, A and B being point
+clouds).}
+            
+\subsection{Formulas for calculations:}
+\begin{enumerate}[series=listWWNumxv,label=\arabic*),ref=\arabic*]
+\item 
+Formula for calculating the percentage of reconstruction accuracy  $P\left(d\right)$:
+\end{enumerate} 
+
+	\begin{equation} \label{ec:equation}
+            P(d)=\frac{\left|\mathit{dist}_{I\rightarrow G}\left(d\right)\right|}{\left|G\right|}100,
+	\end{equation}
+
+ \begin{enumerate}[resume*=listWWNumxv]
+\item 
+Formula for calculating the percentage of reconstruction completeness  $R\left(d\right)$:
+\end{enumerate}
+
+\begin{equation} \label{ec:equationn}
+            R(d)=\frac{\left|\mathit{dist}_{G\rightarrow I}\left(d\right)\right|}{\left|G\right|}100,
+	\end{equation}
+
+ \begin{enumerate}[resume*=listWWNumxv]
+\item 
+Formula for calculating overall accuracy  $F\left(d\right)$:
+\end{enumerate}
+
+\begin{equation} \label{ec:equationnn}
+            F\left(d\right)=\frac{2P\left(d\right)R\left(d\right)}{P\left(d\right)+R\left(d\right)},
+	\end{equation}
+
+{where } $d${\ – the set threshold state;}
+
+ $I$\ – the reconstruction point cloud;
+
+ $G$\ – the ground point cloud;
+
+ $\mathit{dist}_{I\rightarrow G}\left(d\right)$ distance from the reconstruction point cloud to
+the ground point cloud;
+
+ $\mathit{dist}_{G\rightarrow I}\left(d\right)$ distance from ground
+point cloud to reconstruction point cloud.
+
+
+\end{document}
