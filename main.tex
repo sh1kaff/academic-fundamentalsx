@@ -1,0 +1,198 @@
+\documentclass[12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{multicol}
+
+
+\begin{document}
+
+1.Introduction
+
+\raggedright As one can easily note, most real images show some kind of perspective distortion. To achieve ACC function, the following are required:
+\newline
+\begin{itemize}
+    \item[-] The system is able to constantly obtain kinematics information of the preceding vehicle including relative distance and relative speed to the host vehicle;
+    \item[-] Availability, accuracy and reliability of the data under various conditions (e.g. weather);
+    \item[-] The driver is allowed to take over the control whenever needed (e.g. does not feel safe to use it);
+\end{itemize}
+\hspace{5mm}
+2.Gaussian-sphere-based approaches
+
+\raggedright Techniques based on the Gaussian sphere, first introduced by Barnard [3], use a unit radius sphere centered in the optical center as an accumulation space. The system is composed of three different microcontrollers:
+\noindent
+\begin{enumerate}
+\item The path/parking system PC;
+\item Parking administration PC that is monitors the parking lot itself;
+\item He HMI PC that will transmit data to the vehicle's driver;
+\end{enumerate}
+
+\hspace{5mm}
+3. Approaches in the polar space
+
+\raggedright In a polar parameter space, points in the image plane are mapped to sinusoids, according to the following equation ~\eqref{1}:
+\noindent
+\begin{equation}\label{1}
+p=x\cos⁡0+y\sin⁡0,
+\end{equation}
+
+\raggedright where x and y are the coordinates of a point P in the image plane, while p and 8 describe the straight line passing through P and oriented according to the phase of the local gradient. Figure 
+\ref{label1}
+\noindent
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{image1.png}
+    \caption{Characterization of a straight line through polar parameters}
+    \label{label1}
+\end{figure}
+
+
+
+\newpage
+4.First proposal
+
+\raggedright This technique [lo] uses a statistical approach to search for the sine curve corresponding to the vanishing point in the polar parameter space. Essentially, the pair of parameters (xo, yo) representing the point is estimated through a least square method. The approach consists in a minimization of the following functional:
+\noindent
+
+\begin{equation}\label{fig}
+\min_{x_0,y_0} ⁡\sum^n_{i=1} W_i  (p_i-x_0  \cos⁡0_i-y_0  \sin⁡{0_i})^2,
+\end{equation}
+
+\raggedright where:
+\noindent
+-
+
+\begin{equation}\label{3}
+W_i=\frac{v_i}{V}.
+\end{equation}
+
+\raggedright In expression ~\eqref{3} vi is the number of times that a pair $(p_i,0_i)$ is observed, while V is the total number of votes (points) in the polar diagram. Practically, expression  ~\eqref{fig} $P_0(x_0, y_0)$ in the image plane which minimizes the distance from all the straight lines observed on it.
+\noindent
+\newline
+\raggedright Setting $a_i$ = $cos⁡{0_i}$, $b_i$ = $sin{0_i}$ and deriving with respect to $x_0$ and $y_0$, we get the following couple of equations (4\label{sum}):
+\noindent
+
+\begin{equation}\label{sum}
+ \begin{cases}
+  \sum^n_{i=1} W_i a_i (p_i-a_i x_0_i - b_i y_0) = 0 \\
+  \sum^n_{i=1} W_i b_i (p_i-a_i x_0_i - b_i y_0) = 0 
+\end{cases}
+\end{equation}
+\newline
+\raggedright Then,we can call:
+\noindent
+
+
+\begin{equation}\label{sum1}
+A= \sum^n_{i=1} W_i a_i^2; B=\sum^n_{i=1} W_i b_i^2;C=\sum^n_{i=1} W_i a_i b_i ;C=\sum^n_{i=1} W_i a_i p_i ;E=\sum^n_{i=1} W_i b_ip_i;
+\end{equation}
+\raggedright Since A,B,C,D and E are constants, $x_0$ and $y_0$ can be simply found by solving the following linear system:
+$$\begin{cases}
+Ax_0+Cy_0=D.\\
+Cx_0+By_0=E.
+\end{cases}$$
+The analysis just described is applied recursively until the Marshall distance between two successive estimations of the vanishing point is less than the desired precision (i.e., according to disequation (5\label{sum1}), until no more outliers can be found). Radar modality, while useful for other tasks, lacks the resolving power to observe lane marking or even delicate 3D structures. Figure \ref{label2}. The relevance of RADAR sensors is twofold:
+\begin{itemize}
+    \item[-] Detect obstacles (i.e. other vehicles) that obscure the lane marking and road boundaries;
+    \item[-] Discriminate between road and off-road regions based on their large reflectivity difference;
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{image2.png}
+    \caption{(a) Original parameter space containing outliers; (b) Parameter space after the outliers removal}
+    \label{label2}
+
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{image3.png}
+    \caption{Original image for the first experiment}
+    \label{label3}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{image4.png}
+    \caption{Straight lines found through the Hough Transform in the polar space applied to the image in Figure 3 \ref{label3}}
+    \label{label4}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{image5.png}
+    \caption{Accumulation of votes in the (x, y) parameter space for the image in Figure 3 \ref{label3}}
+    \label{label5}
+\end{figure}
+
+\newpage
+\hspace{5mm}
+1. Obstacles detection 
+
+\raggedright Obstacle detection system was developed based on a fusion system consisting on computer vision and laser scanner. Figure \ref{label3}. The laser scanner used is a Sick LDMRS 4-layer Laser and a stereo camera. The laser provides a point Cloud (PC) from which the system extracts the obstacles (clusters of points). Figure \ref{label4}.These clusters are used both for ROI generation for computer vision and as information for obstacle classification, based on machine learning.
+
+
+\hspace{5mm}
+1.1. Point Cloud Clustering 
+
+\raggedrigh The first step is the obstacle detection using laser generated PCs. Obstacles are located as local concentrations of points in the PC Table 1which are mathematically categorized as clusters. Figure \ref{label5}. These parameters are also dependant on the distance to the obstacle Table \ref{tab2}.
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{ISO protocol layer for V2X communications}
+        \label{tab2}
+          \begin{tabular}{|p{5cm}|p{5cm}|}
+          \hline
+           ISO Layer&Protocol\\
+          \hline
+          Application&Application Message Set\\
+          \hline
+          TCP&ETSI EN 302 636-5-\\
+          \hline
+          GeoNetworking Layer&ETSI EN 302 636-4-1\\
+          \hline
+          Logical Link Layer&IEEE 802.2\\
+          \hline
+          MAC LayerP&IEEE 802.11\\
+          \hline
+          Physical Layer&IEEE 802.11p\\
+          \hline
+          \end{tabular}
+   \end{center}
+\end{table}
+
+\begin{table}[h!]
+    \begin{center}
+        \caption{Assistance applications and data transmission}
+        \label{2}
+          \begin{tabular}{|p{5cm}|p{5cm}|p{5cm}|}
+          \hline
+          Application&Data packet&Required Frequency\\
+          \hline
+          Cooperative ACC&Application ID&1 Hz\\
+          \hline
+          Overtaking Assistance&Kind of vehicle/user (car, truck, motorcycle, pedestrian,...)&\\
+          \hline
+          Intersections Assistance&GPS Position (Lat, Lon) (Degrees)&\\
+          \hline
+          Collision Avoidance&Speed (m/s)&\\
+          \hline
+          &Timestamp (sec)&\\
+          \hline
+          &Heading (Degrees)&\\
+          \hline
+          \end{tabular}
+   \end{center}
+\end{table}
+\newpage
+The added 3D information supplied by LIDAR has been mostly used in the following tasks:
+\begin{enumerate}
+\item Identification of objects obscuring lane marks and road boundaries by their 3D extension above road surface;
+\item Estimate ground roughness as a basis for road/off-road segmentation. In turn, this segmentation can lead to road edge detection, off-road cuing, road seeding, etc;
+\item Detect curbs and berms as an edge-of-road marks;
+\end{enumerate}
+
+\end{document}
+
+
