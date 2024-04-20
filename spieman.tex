@@ -58,14 +58,14 @@ The image under the model has, for each image in the training set, been mapped o
 
 
 
-\subsection{Matching the model and the image}{}As in (…) we can create the normalized input image j(p). The texture parameters minimizing the model error e(p) are then given by projecting the normalized input image j(p) on the eigentextures, that is
+\subsection{Matching the model and the image}{}As in (…) we can create the normalized input image $j(p)$. The texture parameters minimizing the model error $e(p)$ are then given by projecting the normalized input image $j(p)$ on the eigentextures, that is
 
 
 \begin{equation}
     \xi = XT (j(p)- \bar{x})
 \end{equation}
 
-Thus, p is the only necessary parameter in our case:
+Thus, $p$ is the only necessary parameter in our case:
 
 \begin{equation}
     g = g(p), x = x(p),
@@ -128,10 +128,15 @@ Closer the initial estimate is to the optimum. Thus, if a video sequence is reco
 
 \begin{equation}
     G_{j} = \sum\limits_{k} (r(p+\Delta p_{jk})-r(p)),
-    \text{where}
     \label{eq5}
 \end{equation}
-$\Delta p_{jk}$ is a vector that perturbs $p$ in the jth componentto the amount of $k$·$c$ for some suitable constant $c$.
+where $\Delta p_{jk}$ is a vector that perturbs $p$ in the jth componentto the amount of $k$·$c$ for some suitable constant $c$.
+
+
+\begin{equation}
+    T^{\mu}_{t} = \frac{\sum_{\upsilon=1}^\nu w^{\upsilon}_{t} \odot T^{\upsilon}_{t}}{\sum_{\upsilon=1}^\nu w^{\upsilon}_{t}}
+\end{equation}
+
 
 \end{spacing}
 \end{document}
