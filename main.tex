@@ -1,0 +1,112 @@
+%\documentclass[12pt]{article}
+%\documentclass[12pt]{seismica}
+%\documentclass[12pt]{gji}
+\documentclass[12pt]{informs4}
+
+\usepackage[english]{babel}
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{multicol}
+
+\begin{document}
+\tableofcontents
+\newpage
+\section{Contrastive Proposal Encoding}
+(CPE) Loss Inspired by supervised contrastive objectives in classification and identification, our CPE loss is defined as follows with considerations tailored for detection. Concretely, for a mini-batch of N RoI box features $\{z_i,u_i,y_i\}_{(i=1)}^N$, where $z_i$ is contrastive head encoded RoI feature for i-th region proposal, $u_i$ denotes its Intersectionover-Union (IOU) score with matched ground truth bounding box, and $y_i$ denotes the label of the ground truth,\\
+\begin{gather}
+L_{CPE}=\frac{1}{N}\sum^N_{i=1}f(u_i)L_{z_i}. \label{1}\\
+L_{z_i}=\frac{-1}{N_{y_i}-1}\sum^N_{j=1, j\neq{i}}I{y_i=y_j}log\frac{exp(z_l z_k/t)}{\sum^N_{k=1}exp(z_l z_k/t)}, \label{2}
+\end{gather}
+where $N_{y_i}$ is the number of proposals with the same label;
+
+$y_i$, and t is the hyper-parameter temperature as in InfoNCE.\\
+
+We use unfrozen RPN and ROI with two modifications, (\ref{1}) double the maximum number of proposals kept after NMS, this brings more foreground proposals for novel instances, and (\ref{2}) halving the number of sampled proposals in RoI head used for loss computation.
+\subsection{Empirical Risk Minimization}
+Given a hypothesis h, we want to minimize its expected risk R, which is the loss measured with respect to p(x,y). Specifically,
+\begin{gather}
+R(h)=\int l(h(x),y)dp(x,y)= E[l(h(x),y)]. \label{3}
+\end{gather}
+As p(x,y) is unknown, the empirical risk (which is the average of sample losses over the training set $D_{train}$ of I samples)
+\begin{gather}
+R_I(h)=\frac{1}{I}\sum^I_{i=1}l(h(x_i), y_i), \label{4}
+\end{gather}
+is usually used as a proxy for R(h), leading to empirical risk minimization (with possibly some regularizers). For illustration, let
+\begin{itemize}
+\item $h$ = arg min $h R(h)$ be the function that minimizes the expected risk;
+\item $h*$ = arg min $h \in H R(h)$ be the function in $H$ that minimizes the expected risk;
+\item $h_I$ = arg min $h \in H R(h)$ be the function in $H$ minimizes the expected risk.
+\end{itemize}
+As $h$ is unknown, one has to approximate it by some $h \in H$. $h*$ is the best approximation for $h$ in H, while $h_I$ is the best hypothesis in $H$ obtained by empirical risk minimization. For simplicity, we assume that $h$, $h*$ and $h_I$ are unique. The total error can be decomposed as:
+\begin{gather}
+E[R(h_I)-R(h)]=\underbrace{E[R(h*)–R(h)]|}_{\varepsilon_{app}(H)}+\underbrace{E[R(h_I)-R(h*)]|}_{\varepsilon_{est}(H, I)}, \label{5}
+\end{gather}
+where the expectation is with respect to the random choice of $D_{train}$.\\
+
+The approximation error $\varepsilon_{app}(H)$ measures how close the functions in $H$ can approximate the optimal hypothesis $h$ and the estimation error $\varepsilon_{est}(H, I)$ measures the effect of minimizing the empirical risk $R_I(h)$ instead of the expected risk R(h) within $H$.
+
+Recently, more complicated task-invariant embedding models are learned via meta-learning 2 methods:
+\begin{enumerate}
+\item Matching Nets and its variants;
+\item Prototypical Networks (ProtoNet) and its variants;
+\item Other methods.
+\end{enumerate}
+%\includegraphics[width=110mm]{figure_1.jpg}
+\begin{figure}[H]
+\centering{
+\includegraphics[width=90mm]{figure_1.jpg}
+}
+\caption{Comparison of learning with sufficient and few training samples}
+\label{f1}
+\end{figure}
+
+However, in FSL, the number of available examples I is small. The empirical risk $R_I(h)$ may then be far from being a good approximation of the expected risk R(h), and the resultant empirical risk minimizer $h_I$ overfits. Indeed, this is the core issue of FSL supervised learning, i.e., the empirical risk minimizer $h_I$ is no longer reliable. Therefore, FSL is much harder. A comparison of learning with sufficient and few training samples is shown in Figure \ref{f1}.\\
+\begin{figure}[H]
+\centering{
+\includegraphics[width=90mm]{figure_2.jpg}
+}
+\caption{Different perspectives on how FSL methods solve the few-shot problem}
+\label{f2}
+\end{figure}
+
+To alleviate the problem of having an unreliable empirical risk minimizer $h_I$ in FSL supervised learning, prior knowledge must be used. Based on which aspect is enhanced using prior knowledge, existing FSL works can be categorized into the following perspectives (Figure \ref{f2}).\\
+
+Depending on what samples are transformed and added to $D_{train}$, we categorize these methods as shown in Table \ref{t1}.\\
+
+\begin{table}[H]
+\caption{Characteristics for FSL methods focusing on the data perspective. The transformer $t(*)$ takes input $(x, y)$ and returns synthesized sample $(x`, y`)$ to augment the few-shot $D_{train}$}
+\begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+\hline
+category & input $(x,y)$ & transformer $t$ & output $(x`, y`)$\\
+\hline
+transforming samples from $D_{train}$ & original $(x_i, y_i)$ & learned transformation function on $x_i$ & $(t(x_i), y_i)$\\
+\hline
+transforming samples from a weakly labeled or unlabeled data set & weakly labeled or unlabeled $(x*, -)$ &  a predictor trained from $D_{train}$ & $(x*, t(x*))$\\
+\hline
+transforming samples from similar data sets & samples $\{(x_j^k, y_j^k)\}$ from similar data sets & an aggregator to combine $\{(x_j^k, y_j^k)\}$ & $(t(\{x_j^k\}), (\{y_j^k\}))$\\
+\hline
+\end{tabular}
+\label{t1}
+\end{table}
+
+In terms of what prior knowledge is used, methods belonging to this category can be further classified into four types (Table \ref{t2}).\\
+
+\begin{table}[H]
+\caption{Characteristics for FSL methods focusing on the model perspective}
+\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+strategy & prior knowledge & how to constrain $H$\\
+\hline
+multitask learning & other T’s with their data sets D’s & share/tie parameter\\
+\hline
+embedding learning & embedding learned from/together with other T ’s & project samples to a smaller embedding space in which similar and dissimilar samples can be easily discriminated\\
+\hline
+learning with external memory & embedding learned from other T’s to interact with memory & refine samples using key-value pairs stored in memory\\
+\hline
+generative modeling & prior model learned from other T’s & restrict the form of distribution\\
+\hline
+\end{tabular}
+\label{t2}
+\end{table}
+\end{document}
