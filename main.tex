@@ -13,38 +13,38 @@
 \tableofcontents
 \newpage
 \section{Contrastive Proposal Encoding}
-(CPE) Loss Inspired by supervised contrastive objectives in classification and identification, our CPE loss is defined as follows with considerations tailored for detection. Concretely, for a mini-batch of N RoI box features $\{z_i,u_i,y_i\}_{(i=1)}^N$, where $z_i$ is contrastive head encoded RoI feature for i-th region proposal, $u_i$ denotes its Intersectionover-Union (IOU) score with matched ground truth bounding box, and $y_i$ denotes the label of the ground truth,\\
+(CPE) Loss Inspired by supervised contrastive objectives in classification and identification, our CPE loss is defined as follows with considerations tailored for detection. Concretely, for a mini-batch of N RoI box features $\{z_i,u_i,y_i\}_{(i=1)}^N$, where $z_i$ is contrastive head encoded RoI feature for $i$-th region proposal, $u_i$ denotes its Intersectionover-Union (IOU) score with matched ground truth bounding box, and $y_i$ denotes the label of the ground truth,\\
 \begin{gather}
 L_{CPE}=\frac{1}{N}\sum^N_{i=1}f(u_i)L_{z_i}. \label{1}\\
-L_{z_i}=\frac{-1}{N_{y_i}-1}\sum^N_{j=1, j\neq{i}}I{y_i=y_j}log\frac{exp(z_l z_k/t)}{\sum^N_{k=1}exp(z_l z_k/t)}, \label{2}
+L_{z_i}=\frac{-1}{N_{y_i}-1}\sum^N_{j=1, j\neq{i}}I{y_i=y_j}log\frac{exp(z_l z_k/t)}{\sum\limits^N_{k=1}exp(z_l z_k/t)}, \label{2} \text{where } N_{y_i} \text{ is the number}
 \end{gather}
-where $N_{y_i}$ is the number of proposals with the same label;
+of proposals with the same label;
 
-$y_i$, and t is the hyper-parameter temperature as in InfoNCE.\\
+$y_i$, and $t$ is the hyper-parameter temperature as in InfoNCE.\\
 
 We use unfrozen RPN and ROI with two modifications, (\ref{1}) double the maximum number of proposals kept after NMS, this brings more foreground proposals for novel instances, and (\ref{2}) halving the number of sampled proposals in RoI head used for loss computation.
 \subsection{Empirical Risk Minimization}
-Given a hypothesis h, we want to minimize its expected risk R, which is the loss measured with respect to p(x,y). Specifically,
+Given a hypothesis $h$, we want to minimize its expected risk $R$, which is the loss measured with respect to $p(x,y)$. Specifically,
 \begin{gather}
 R(h)=\int l(h(x),y)dp(x,y)= E[l(h(x),y)]. \label{3}
 \end{gather}
-As p(x,y) is unknown, the empirical risk (which is the average of sample losses over the training set $D_{train}$ of I samples)
+As $p(x,y)$ is unknown, the empirical risk (which is the average of sample losses over the training set $D_{train}$ of I samples)
 \begin{gather}
 R_I(h)=\frac{1}{I}\sum^I_{i=1}l(h(x_i), y_i), \label{4}
 \end{gather}
-is usually used as a proxy for R(h), leading to empirical risk minimization (with possibly some regularizers). For illustration, let
+is usually used as a proxy for $R(h)$, leading to empirical risk minimization (with possibly some regularizers). For illustration, let
 \begin{itemize}
 \item $h$ = arg min $h R(h)$ be the function that minimizes the expected risk;
 \item $h*$ = arg min $h \in H R(h)$ be the function in $H$ that minimizes the expected risk;
 \item $h_I$ = arg min $h \in H R(h)$ be the function in $H$ minimizes the expected risk.
 \end{itemize}
-As $h$ is unknown, one has to approximate it by some $h \in H$. $h*$ is the best approximation for $h$ in H, while $h_I$ is the best hypothesis in $H$ obtained by empirical risk minimization. For simplicity, we assume that $h$, $h*$ and $h_I$ are unique. The total error can be decomposed as:
+As $h$ is unknown, one has to approximate it by some $h \in H$. $h*$ is the best approximation for $h$ in $H$, while $h_I$ is the best hypothesis in $H$ obtained by empirical risk minimization. For simplicity, we assume that $h$, $h*$ and $h_I$ are unique. The total error can be decomposed as:
 \begin{gather}
 E[R(h_I)-R(h)]=\underbrace{E[R(h*)–R(h)]|}_{\varepsilon_{app}(H)}+\underbrace{E[R(h_I)-R(h*)]|}_{\varepsilon_{est}(H, I)}, \label{5}
 \end{gather}
 where the expectation is with respect to the random choice of $D_{train}$.\\
 
-The approximation error $\varepsilon_{app}(H)$ measures how close the functions in $H$ can approximate the optimal hypothesis $h$ and the estimation error $\varepsilon_{est}(H, I)$ measures the effect of minimizing the empirical risk $R_I(h)$ instead of the expected risk R(h) within $H$.
+The approximation error $\varepsilon_{app}(H)$ measures how close the functions in $H$ can approximate the optimal hypothesis $h$ and the estimation error $\varepsilon_{est}(H, I)$ measures the effect of minimizing the empirical risk $R_I(h)$ instead of the expected risk $R(h)$ within $H$.
 
 Recently, more complicated task-invariant embedding models are learned via meta-learning 2 methods:
 \begin{enumerate}
@@ -61,7 +61,7 @@ Recently, more complicated task-invariant embedding models are learned via meta-
 \label{f1}
 \end{figure}
 
-However, in FSL, the number of available examples I is small. The empirical risk $R_I(h)$ may then be far from being a good approximation of the expected risk R(h), and the resultant empirical risk minimizer $h_I$ overfits. Indeed, this is the core issue of FSL supervised learning, i.e., the empirical risk minimizer $h_I$ is no longer reliable. Therefore, FSL is much harder. A comparison of learning with sufficient and few training samples is shown in Figure \ref{f1}.\\
+However, in FSL, the number of available examples I is small. The empirical risk $R_I(h)$ may then be far from being a good approximation of the expected risk $R(h)$, and the resultant empirical risk minimizer $h_I$ overfits. Indeed, this is the core issue of FSL supervised learning, i.e., the empirical risk minimizer $h_I$ is no longer reliable. Therefore, FSL is much harder. A comparison of learning with sufficient and few training samples is shown in Figure \ref{f1}.\\
 \begin{figure}[H]
 \centering{
 \includegraphics[width=90mm]{figure_2.jpg}
