@@ -1,0 +1,94 @@
+\documentclass[11pt]{article}
+
+\usepackage[russian, english]{babel}
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{multicol}
+\usepackage{parskip}
+\usepackage{indentfirst}
+\setlength{\parindent}{7pt}
+
+\begin{document}
+\tableofcontents
+\newpage
+\section{Related Work}
+\subsection{Image Postprocessing}  
+
+Accordingly, these rules allow reducing the number of potential TS regions which helps accelerating the process and improving the accuracy. These regions are going to be the input of the next classifying step Figure \par
+\noindent
+
+\begin{enumerate}
+\item Divide the surrounding region into several blocks and seta initial label teach block.
+\item Settleable of each block interregional orthographic sign to s, and exclude them from the following process.
+\item Merget head jacent blocks if the Euclidean distance of the average L*a*b* value between the blocks is smaller than a threshold.
+\item Iterate the above process until convergence is reached.
+\end{enumerate}
+
+Therefore, for every potential region, we checked the following rules: \par
+\noindent
+
+\begin{itemize}
+    \item[-] The height and the width of every potential TS region should be greater than 14 and lower than 100.
+    \item[-] The area of every potential TS region has to be greater than 30 percent and less than 80 percent of the corresponding minimum bounding box area.
+    \item[-] The rate of height and width of a potential TS should be an interval of [0.5, 1.5].
+\end{itemize}
+
+\subsection{Segmentation of surrounding region}
+
+ Accordingly, these rules allow reducing the number of potential TS regions which helps accelerating the process and improving the accuracy. These regions are going to be the input of the next classifying step Figure (\ref{1}). \par
+
+\begin{figure}[H]
+    \raggedright
+    \includegraphics[width=100mm]{image.jpg}
+    \caption{\textbf{The pixel resolution of most} }
+    \label{1}
+\end{figure}
+
+\subsection{Hough Transformation}
+ The median filter is applied to the entire image, including those parts that are not affected by the noise. An image filtered by the median filter can be defined by.\par
+\noindent
+\begin{equation}
+F(i,j)=median_{k,l\epsilon O_{a,e}}{D(i+k,j+l)} \label{2}
+\end{equation}
+
+
+
+\raggedright where $O_{a,e}$, represents a frame within the image of size ∗ pixels, that is centered in point with coordinates(i,j)\par
+\begin{equation}
+G(x,y)=\frac{1}{2 \pi \delta^2} * e^-{\frac{x^2+y^2}{2*\delta^2}} \label{3}
+\end{equation} 
+\raggedright where $\delta$ stands for standard deviation of the kernel.\par
+\begin{figure}[H]
+    \raggedright
+    \includegraphics[width=100mm]{image2.jpg}
+    \caption{\textbf{Road sign} }
+    \label{4}
+\end{figure}\par
+
+ Processing time for the overall system is analyzed in this section. The details on time required for each phase are listed in Formula (\ref{2}). The processing time for the system is 0.134s with 0.122s for pre-process phase and 0.012s for classification Figure (\ref{4}). With an average processing time of 0.134s, the system could be applied in real-time application 2. \par
+\noindent
+\begin{equation}
+t=(\frac{1}{2*R*M})-(\frac{R}{M}-1)*B*H \label{5}
+\end{equation}
+\raggedright Where R is the region, M is the cell size, B is the number of cells per block, and H is the number of histograms per cell.\par
+\begin{table}[h!]
+    \begin{center}
+        \caption{\textbf{The confusion matrix is a detailed}}
+        \label{6}
+          \begin{tabular}{|p{3cm}|p{4cm}|}
+          \hline
+           Pre-Process&Processing Time(s)\\
+          \hline
+          Resize image&0.053\\
+          \hline
+          Normalization&0.069\\
+          \hline
+          \end{tabular}
+   \end{center}
+\end{table}
+\newpage
+
+ This proposed classification system with the integration of AI and image processing techniques gave a satisfying performance system comprises of Neural network classifier presented here Formula(\ref{5}). The proposed system is tested with a dataset consist of different lighting condition which has high illumination effect, shadowing effect from physical objects and occlusion due to weather. With a 0.134s processing time, the traffic signs are extracted from the image and classified Table (\ref{6}). An accuracy of 84.4 percent is achieved by the system. From the experimental result, it shows that the system able to overcome most of the illumination effect in the Figure(\ref{4}). However, highly distorted image due to illumination and shadowing effect, color temperature created by image normalization due to noisy background will tend to make the system fail to detect the traffic signs. In classification phase, traffic signs only classified according to its shape. Feature such as recognizing the exact sign would be a big leap in classification as currently only few signs can be recognized. Furthermore, due to lack of available dataset of Malaysian traffic sign, the evaluation of the system is only done with the dataset from Swedish. Hence, to implement the system within Malaysia or at international level, different dataset should be used for developing the system. \par
+
+\end{document}
