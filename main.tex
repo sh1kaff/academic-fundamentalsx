@@ -1,0 +1,133 @@
+\documentclass{ledger}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+
+
+
+\begin{document}
+
+\tableofcontents
+\newpage
+
+\section{Related Work}
+\subsection{Related Work in the Area of Taxonomies}
+Howard and Longstaff [2] described attacks as the following process. By using a tool, attackers exploited vulnerabilities in a target and attack for an unauthorized access. They organized a taxonomy of attacks, including five dimensions: attackers, tools used, access, targets chosen, and results achieved. The same idea was later used in Alvarez’s classification of Web attacks [3]. They proposed a taxonomy with eight dimensions: entry point, vulnerability, service, action, input length, target, scope and privileges. We use some of Howard and Alvarez’s ideas in the first and fourth dimensions of our taxonomy. Hansman and Hunt [4] proposed four taxonomies of attacks based on four different dimensions of classification covering network and computer attacks. The four dimensions are: attack vector used to classify the attack, target of the attack, vulnerability base on common vulnerabilities exposures (CVE) or criteria from Howard’s taxonomy, payload or effects involved. They mentioned the need of future research on correlation between attacks within the taxonomy and the utilization of KB.  
+
+\subsection{Input Data Gathering}
+The figure (Fig.\ref{fig1:enter-label}) demonstrates how successful attacks penetrate multiple layers of protection. Let us consider the following input data used for the security assessment: topology of the test network (Fig.\ref{fig2:enter-label})), values of the topological metrics, especially Criticality of the hosts (calculated on the previous assessment stage), attack graph, security events.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=100mm]{325.png}
+    \caption{Successful attacks propagate through several protection layers}
+    \label{fig1:enter-label}
+\end{figure}
+\
+
+Here are the points that we have laid out in this paper:
+\begin{itemize}
+    \item Here are the points that we have laid out in this paper:
+    \item Legitimate users sometimes prioritise immediate benefits to the detriment of long-term security. 
+    \item Passwords, anti-virus updates, email attachments and shared folders, respectively, raise such issues as memory limitations, risk, trust and practicality. 
+    \item Security does not imply protecting everything since some losses are acceptable.  
+    \item Trade-offs by legitimate users differ in nature from the ones performed by attackers. 
+\end{itemize}
+    
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=100mm]{324.png}
+    \caption{Topology of the test network and Criticality values}
+    \label{fig2:enter-label}
+\end{figure}
+\
+
+
+
+
+
+
+\subsection{Impact Scores}
+There are different interpretations in assessing cyber attacks to users. User impact can be thought as the level of confidence a user can still use the machines he or she has accounts on. In realizing this notion, $I_u(u)$  is defined as a weighted average of $I_H(h)$ for $h \in H(u)$  with weights $c(h, u)$ .
+
+$$ I_U(u)=\cfrac{\sum c(h, u)*I_H(h)}{\sum c(h,u)},$$
+where $I_U(u)$ is the unknown variable;\\
+$I_H(h)$ is a known variable.
+
+The network impact score will allow an analyst to monitor the health of a subset or of the entire network. Intuitively, the calculation (Formula 1) may be an aggregation of $I_H$, $I_S$ or $I_U$  within the subset or the entire network. Consider the target $n\in N$ and a set of weights with respect to this target. The impact score $I_H(h)$ can be defined as follows for X = H, S, U.
+$$ I_N(n)=\cfrac{\sum (c(x, n)*I_X(x))}{\sum c(x,n)},$$
+
+The attack effect reflects the impact of exploitation of a potential weakness of the system. The more attack effect on the security property of the system, the more impact caused by exploitation of the vulnerability. Risk calculation is given as
+$$ R=\sum\limits_{i}  P_iD_i,$$
+
+R is the system risk, $P_i$ means the probability of occurrence of ith weakness, and $D_i$ means the damage caused by the ith weakness. So the evaluation of attack effect is helpful to risk assessment.\\
+
+The security assessment technique includes the following stages: 
+\begin{enumerate}
+    \item Definition of the attacker position on the attack graph on the base of the information from the security event;
+    \item Determination of the attacker skill level on the base of information from the security event;
+    \item Calculation of the probabilities of the paths that go through the node that corresponds to the attacker position;
+\end{enumerate}
+
+
+
+
+\subsection{Models of Hackers and Breakins}
+Respondents with these models could use them to extrapolate many different situations and use them to make many security-related decisions on their computer. Table \ref{table1:data} summarizes the major differences between the four models  \\
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
+     \hline
+     Subjects & Bad Buggy & Software & Mischief & Support Crime \\
+     \hline
+     Creator & Unspecified & Bad  people  & Mischievous hackers  & Criminals \\
+     \hline
+     Purpose of viruses & Unspecified & No purpose & Cause mischief; cause annoying problems & Gather information for identity theft\\
+     \hline
+     Effects of infection  & General notion of bad things happening & Same effects as buggy, but more extreme & Annoying problems with computers & No direct harm to computer; stolen information\\ 
+     \hline
+     Method of transmission & “Catch” viruses; miscellaneous methods of catching them &
+     Must be manually downloaded and execute &
+     Passive “catching” by visiting shady  &
+     Spread automatically, or installed by hackers \\
+     \hline
+\end{tabular}
+\caption{Summary of folk models about viruses, organized by model features}
+\label{table1:data}
+\end{table}
+
+My respondents described four distinct folk models of hackers. These models differed mainly in who they believed these hackers were, what they believed motivated these people, and how they chose which computers to break in to. Table \ref{table2:data} summarizes the four folk models of hackers.\\
+\begin{table}[H]
+\centering
+\begin{tabular}{p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}}
+     \hline
+    Subjects  & Bad Buggy & Software & Mischief & Support Crime \\
+     \hline
+    Identity of hacker(s) & Young technical geek & Some criminal & Professional criminal hackers &
+Young technical geek \\
+     \hline
+     Level of organization &Solo, or to impress friends & Part of a criminal organization & Unspecified & Solo, but a contractor for criminals \\
+     \hline
+     Reason for break-ins &Cause mischief & Look for financial and personal information & Look for financial and personal information & Look for financial and personal information \\
+     \hline
+Effects of break-ins & Lots of computer problems; requires reinstall & Possible harm to computer; exposure of personal information  & No harm to computer; exposure of personal information & Exposure of personal information \\
+    \hline
+    Target(s) & Anyone; doesn’t matter &Opportunistic; could be me & Not me; only looking for rich or important people & Not me; looking for large databases of info \\
+     \hline
+     Am I a target?  &Possibly &Possibly & No & No \\
+      \hline
+\end{tabular}
+\caption{Summary of folk models about hackers, organized by model features }
+\label{table2:data}
+\end{table}
+    
+
+
+
+\end{document}
