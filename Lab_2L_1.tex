@@ -1,0 +1,122 @@
+\documentclass{optica-article}
+\usepackage[russian,english]{babel}
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{graphicx}
+\usepackage{float}
+
+\begin{document}
+
+\begin{titlepage}
+    \title{HARDWARE SECURITY THROUGH DESIGN OBFUSCATION}
+    \date{}
+    \maketitle
+    \tableofcontents
+\end{titlepage}
+
+\section{Obfuscation-based secure SoC design}
+
+\subsection{Analysis of Netlist Obfuscation. Obfuscation Metric}
+
+Let, \textit{f} be a function of the set P1 of primary inputs and state-element outputs and g be a function of a set P2 of primary inputs and state element (SE) outputs. Let $P_1 \cap P_2 = P$ , $|P_1| = p_1$, $|P_2| = p_2$, $|P| = p$, $P_1 \cap P_2 = \Gamma$ and $|\Gamma| = \gamma = p_1 + p_2 − p$. Further, let g be a Boolean OR function with $p2$ inputs. Then, for $(2^{p_2} - 1)$ of its input combinations, \textit{g} is at logic-1. Consider en = 1. Then, for all these $(2^{p_2} - 1)$ input combinations of $P_2$ , $f_{mod} = \bar{f}$, causing a failing vector. Corresponding to each of these $(2^{p_2} - 1)$ combinations of $P_2$, there are $(p_1 - p)$ other independent primary inputs to \textit{f}. Hence, the total number of failing vectors when $g = 1$ is:
+
+\begin{equation}
+    \label{equation:1}
+    N_{g1}= 2^{(p_1- p)}\cdot(2^{p_2} - 1).
+\end{equation}
+
+\indent For the other “all zero” input combination of $P_2$, $f = 0$. Let the number of possible cases where $f = 1$ at $g = 0$ be $N_{g0}$. Then, the total number of failing input patterns:
+
+\begin{equation}
+    \label{equation:2}
+    N_{failing}= N_{g1}+N_{g0}=2^{(p_1- p)}\cdot(2^{p_2} - 1)+N_{g0}.
+\end{equation}
+
+\indent In the special case when $P_1 \cap P_2  = P = \phi$, $N_{g0}$ is given simply by the number of possible logic-1 entries in the truth-table of \textit{f}.\\
+\indent The total input space of the modified function has a size $2^\gamma$. The \textit{obfuscation metric} (M) is defined as:
+
+\begin{equation}
+    \label{equation:3}
+    M=\frac{N_{failing}}{2^{\gamma+1}} =\frac{(2^{(p_1- p)}\cdot(2^{p_2} - 1)+N_{g0})}{2^{p_1+p_2-p+1}}.
+\end{equation}
+
+\indent The “+1” factor in the denominator is due to the \textit{en} signal.\\
+
+
+
+\subsection{System-level Obfuscation Methodology}
+
+\subsubsection{Choice of Optimal Set of Nodes for Modification}
+
+The practical level of obfuscation is estimated by the amount of verification mismatch reported by a Formal Verification based equivalence checker tool. Formal equivalence checker tools essentially try to match the input logic cones at the state-elements and the primary outputs of the reference and the implementation. Thus, in determining the suitability metric for a node as a candidate for modification, both these factors need to be considered. The following metric is proposed as the suitability metric for a node:$$M_{node}=\left(\frac{\omega_1\cdot FO}{FO_{max}}+\frac{\omega_2\cdot FI}{FI_{max}}\right)\times\frac{FO\cdot FI}{FO_{max}\cdot FI_{max}},$$\\
+where $M_{node}$ - obfuscation metric for a node;\\
+$FI$ and $FO$ - the number of nodes in the fan-in and the fan-out cone of the node, respectively;\\
+$FI_{max}$ and $FO_{max}$ - the maximum number of fan-in and fan-out nodes in the circuit netlist and are used to normalize the metric;\\
+$\omega_1$ and $\omega_2$ - weights assigned to the two factors, with $0\leq\omega_1$, $\omega_2\leq1$ and $\omega_1 + \omega_2 = 1$. The values $\omega_1 = \omega_2 = 0.5$ were chosen because they gave the best results in terms of obfuscation, as shown in the next section.
+
+\begin{enumerate}
+    \item The modifying node should have a very large fan-in cone, which in turn would substantial expand the logic cone of the modified node;
+    \item It should not be in the fan-out cone of the modified node;
+    \item It should not have any node in its fan-in cone which is in the fan-out cone of the modified node.
+\end{enumerate}
+
+
+
+\subsubsection{The HARPOON Design Methodology}
+
+\begin{itemize}
+    \item A chip design house buys an IP core from an IP vendor (Figure \textbf{\ref{fig:Figure 1}}), and makes an illegal copy or “clone” of the IP. The IC design house then sells it to another chip design house (after minor modifications) claiming the IP to be its own;
+    \item An untrusted fabrication house makes an illegal copy of the GDS-II database supplied by a chip design house, and then illegally sells them as hard IP;
+    \item An untrusted foundry manufactures and sells counterfeit copies of the IC under a different brand name.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{images/Figure 1.png}
+    \caption{SoC design modification to support hardware obfuscation. An on-chip controller combines the input patterns with the output of a PUF block to produce the activation patterns}
+    \label{fig:Figure 1}
+\end{figure}
+
+
+
+\subsection{Results}
+
+Choice of Scheme \\
+
+\begin{table}[H]
+    \centering
+    \caption{Average Number of Failing Patterns for ISCAS-89 Benchmark Circuits for Different Modification Schemes}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        Benchmark & Scheme-1 & Scheme-2 & Scheme-3 \\\hline
+        S298 & 51 & 158 & 193 \\\hline
+        S344 & 215 & 1093 & 1233 \\\hline
+        S444 & 197 & 569 & 7732 \\\hline
+        S526 & 146 & 485 & 1186 \\\hline
+        S641 & 598 & 2491 & 5135 \\\hline
+        S713 & 913 & 2918 & 3301 \\\hline
+        S838 & 382 & 1757 & 5106 \\\hline
+        S1196 & 2423 & 5382 & 9573 \\\hline
+        S1238 & 2552 & 5157 & 9511 \\\hline
+        S1423 & 6431 & 1816 & 28350 \\\hline
+        S1488 & 333 & 18120 & 1156 \\\hline
+        S5378 & 13311 & 29482 & 53066 \\\hline
+        S9234 & 13862 & 30385 & 53365 \\\hline
+        S3124 & 1344 & 32252 & 64573 \\\hline
+    \end{tabular}
+    \label{tab:Table 1}
+\end{table}
+
+
+Table \textbf{\ref{tab:Table 1}} shows: the simple node modification scheme using only XOR gates (scheme 1), the theoretically suggested modification scheme employing OR-ing of selected primary inputs (scheme 2) and lastly the low-overhead modification scheme employing random selection of internal nodes avoiding combinational loops (scheme 3). The maximum number of modifiable nodes $N_{max}$ for each benchmark circuit was determined considering four different area constraints (5\%, 10\%, 15\% and 20\%) (Figure \textbf{\ref{fig:Figure 2}}).
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=100mm]{images/Figure 2.png}
+    \caption{Observed verification failures (with application of the HARPOON methodology) for ISCAS-89 circuits}
+    \label{fig:Figure 2}
+\end{figure}
+
+
+\end{document}
+
