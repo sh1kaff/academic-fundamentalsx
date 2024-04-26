@@ -3,7 +3,7 @@
   layout=preprint,  %% preprint (for submission) or publish (for publisher only)
   year=20xx,
   volume=x,
-]{extra/ledger}
+]{joas}
 
 
 
@@ -20,7 +20,7 @@
 % specify the .bib file for references
 %\addbibresource{reference.bib} 
 
-
+\addbibresource{reference.bib} 
 
 
 
@@ -28,15 +28,14 @@
 
 
 \date{}  % Remove date
-
-\begin{document}
-
-
 \title{ASL-3DCNN: American sign language recognition technique using 3-D convolutional neural networks
 }
 
 \author{Shikhar Sharma   Krishan Kumar}
-\maketitle
+
+ \begin{document}
+ \maketitle
+
 
 \begin{abstract}
 The communication between a person from the impaired community with a person who does not understand sign language could be a tedious task. Sign language is the art of con- veying messages using hand gestures. Recognition of dynamic hand gestures in American Sign Language (ASL) became a very important challenge that is still unresolved. In order to resolve the challenges of dynamic ASL recognition, a more advanced successor of the Convolutional Neural Networks (CNNs) called 3-D CNNs is employed, which can recog- nize the patterns in volumetric data like videos. The CNN is trained for classification of 100 words on Boston ASL (Lexicon Video Dataset) LVD dataset with more than 3300 English words signed by 6 different signers. 70\% of the dataset is used for Training while the remaining 30\% dataset is used for testing the model. The proposed work outperforms the existing state-of-art models in terms of precision (3.7\%), recall (4.3\%), and f-measure (3.9\%). The computing time (0.19 seconds per frame) of the proposed work shows that the proposal may be used in real-time applications.  %\lipsum[1]
@@ -120,12 +119,16 @@ f (x) = ln(1 + e^x) \label{eq3}
 
 
 %--- Section ---%
- 
+\par {\Huge \emph {Look at tables \ref{tab1} and \ref{tab2}}}
+
 
 \begin{table}[!ht]
+\centering
 \caption{ Configuration of 3-D CNN model for Sign recognition\label{tab1}}
-\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}llll@{\extracolsep\fill}}
-\toprule
+\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}|l|l|@{\extracolsep\fill}} 
+
+
+\toprule 
 Fully connected & neurons: 101\\
 \midrule
 Dropout & Ratio : 0.5 \\
@@ -138,8 +141,8 @@ Fully connected & neurons: 4096\\
 
 
 \begin{table}[!ht]
-\caption{ Configuration of 3-D CNN model for Sign recognition\label{tab1}}
-\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}llll@{\extracolsep\fill}}
+\caption{ Configuration of 3-D CNN model for Sign recognition\label{tab2}}
+\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}|l|l|l|l|@{\extracolsep\fill}}
 \toprule
 Model & Precision (\%) & Recall (\%) & F-measure (\%)\\
 \midrule
@@ -156,7 +159,7 @@ Uebersax et al. & 85.6 &87.3 & 84.9 \\
 
 
 %--- Section ---%
-\section{How to Include Figures}\label{sec6}
+\section{lalala}\label{sec6}
 
 The moment estimates are updated as in \ref{eq4} and \ref{eq5}:
 
@@ -186,35 +189,17 @@ The above process generates the processed video sequences having gray-scale fram
     \label{f3}
 \end{figure}
 
+\par {\Huge \emph{Look at formulas \ref{eq6} and \ref{eq7}}}
 
 
 
+\begin{equation}
+f(\theta)=-\frac{1}{n}\sum^n_{i=1}\sum^m_{j=1}y_{ij}log(p_{ij})\label{eq6}
+\end{equation}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\begin{equation}
+    \theta_{t}=\theta_{t-1}-\frac{a*m_{t}}{\sqrt{v_{t}}}\label{eq7}
+\end{equation}
 
 
 
