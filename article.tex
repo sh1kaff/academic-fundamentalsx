@@ -1,0 +1,153 @@
+\documentclass[12pt]{spieman}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+\begin{document} 
+\tableofcontents
+\newpage
+\begin{spacing}{2}
+
+\section{Measuring network-layer discrimination}
+As we discuss, a straightforward technique for services to block Tor is to filter traffic from publicly listed exit nodes. To broadly assess this, we measure Tor filtering using ZMap probing from both Tor exit nodes and from control (non-Tor) nodes to see how their access to remote addresses differs. For convenience we term these measurements as assessing ‘network-layer’ discrimination, though from a technical perspective they combine measurement of layer-3 and layer-4 blocking, since we restrict our measurements to attempts to connect to TCP port 80 services. 
+
+\subsection{Overview of measurements and block detection}
+
+We run our scans from Tor exit nodes and from two sets of control nodes: university nodes and a Tor middle node. We compare responses to our Tor scans with those from the baseline control scans and flag deviations as potentially reflecting discriminatory blocking. Target hosts respond to ZMap probes (TCP SYNs) in one of three ways: a) sending a SYN-ACK, which we term a successful response; b) sending a RST, which we term an unsuccessful response; or c) not responding, which we also deem an unsuccessful response. ZMap, by default, only records successful responses; we modified it to record RSTs as well. We note that for an individual probe it is not possible to distinguish a lack of response from packet loss.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{c}
+\includegraphics[height=5.5cm]{figure_1.png}
+\end{tabular}
+\end{center}
+\caption 
+{ \label{fig:1}
+Distribution of time until receiving a response packet since the last probe was sent for a full scan of IPv4. } 
+\end{figure} 
+
+In addition, we need to configure a timeout for ZMap to deem that a packet did not receive a response. Figure \ref{fig:1} shows the distribution of the time measured between sending the last scan packet and receiving a response for a full scan of IPv4. To generate this plot, ZMap logged response packets for 25 minutes after sending the last scan packet. More than 95\% of all replies (excluding RSTs), and 80\% of RSTs arrive within the first 30 seconds, while the rest trickle in up until 500 seconds. Though unusual, late responses could arise due to backed-off timers in the case of SYN-ACKs, huge bufferbloat, or initial latency incurred by extensive setup requirements of cellular wireless devices. Given this data, we chose a conservative cooldown value of 10 minutes for responses to come in.
+
+\subsection{Mitigating the Impact of Packet Loss}
+
+As noted above, ZMap does not allow us to distinguish between a single non-response and a packet loss event. To account for this limitation, we take care to minimize measurement loss in our measurements and to account for potential packet loss in the network. 
+
+\begin{table}[ht]
+\caption{Summary of control and exit node data.} 
+\label{tab:1}
+\begin{center}      
+\begin{tabular}{|c|c|}
+\hline
+\multicolumn{2}{|c|}{\rule[-1ex]{0pt}{3.5ex} Control nodes}  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Number of control nodes & 3  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Number of IPv4 scans & 7 per control node   \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Time span of scans & Aug 7–13   \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Scanned IP addresses per measurement & 3,662,744,599  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Average hit-rate per measurement & 1.91\% ($\sigma$=0.01\%)  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Average (estimated) network loss & 0.84\% ($\sigma$=0.18\%)  \\
+\hline
+\multicolumn{2}{|c|}{\rule[-1ex]{0pt}{3.5ex} Tor exit nodes}  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Number of exit node & 4  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Number of scans & 4 per exit node \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Time span of scans & Aug 10–13 \\
+\hline 
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Average hit-rate per measurement & 1.87\% ($\sigma$=0.03\%) \\
+\hline 
+\end{tabular}
+\end{center}
+\end{table} 
+
+\subsection{Data}
+
+We run our measurements from a set of three control nodes and a set of four Tor exit nodes. Two control nodes are located in US universities and one in a European university. The control node measurements serve a dual purpose: they allow us to calibrate and understand our measurement method and the data, and they serve as the baseline measurements against which we compare the Tor exit node measurements.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{c}
+\includegraphics[height=5.5cm]{figure_2.png}
+\end{tabular}
+\end{center}
+\caption 
+{ \label{fig:2}
+Number of new IP addresses each control node sees per day. } 
+\end{figure} 
+
+Once fully developed and debugged, for our final analysis we gathered 37 full IPv4 scans over a period of 7 days, conducting 16 from four Tor exit nodes. Table \ref{tab:1}  shows the breakdown of the measurements run from the control and Tor exit nodes. We now turn to analyzing the final data to understand temporal churn—how the footprint changes across scans spanning multiple days—and spatial churn—how our view of the global web footprint set changes across the three control locations.
+
+For the same location, we see significant differences in the number of IP addresses that successfully respond, even between consecutive days, ranging up to 17\%. Figure \ref{fig:2} shows the number of new IP addresses that each site successfully contacts per day. Using the first day as the baseline, this value somewhat gradually drops from a peak of about 7 million on the second day to about 4 million on day 7. The slow convergence rate indicates that temporal churn remains high even for the same location, and that obtaining a true underlying web footprint for a given location may not be well-defined. Temporal churn is likely caused by nodes that only come online occasionally; however we do not investigate the reasons in this paper.
+
+\subsection{Assessing Network-Layer Discrimination }
+Having gained confidence in our measurement methodology, we now turn to analyzing the resulting data. We conducted the scans from four high-bandwidth Tor exit nodes for 4 days (Aug. 10–13, 2015) (Table \ref{tab:2}). These represent 3\% of aggregate Tor exit bandwidth. We note that each exit node hosts 2–3 Tor processes on the same interface. As our 100 Mbps scans use the same IP address as the Tor exit node, we turned off all but one Tor process on these machines for the duration of the experiment to minimize load on the interface and potential packet loss on the interface and/or the outgoing link. These preventive measures helped reduce our reported pcap loss on the exit nodes to 0.001\% of the typical number of responses seen per scan. We also chose Tor instances that use the same IP address for incoming and outgoing Tor traffic to allow our scans to trigger even ‘lazy’ blacklists.1 For three of the exit nodes, we displayed our scan notice page on port 8080 instead of the usual port 80, as the latter already displayed a separate Tor abuse complaint page.
+
+\begin{table}[ht]
+\caption{Description of Tor exit nodes from which IPv4 scans were conducted.} 
+\label{tab:2}
+\begin{center}      
+\begin{tabular}{|c|c|c|c|}
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Exit Node & Location & Uptime & Bandwidth (MB/s)  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Axigy1 & USA & 35 days & 31.09   \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Axigy2 & USA & 76 days & 31.46  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  NForce2 & Netherlands & 35 days & 31.46  \\
+\hline
+\rule[-1ex]{0pt}{3.5ex}  Voxility1 & Romania & 1 day 17 hr & 16.99  \\
+\hline 
+\end{tabular}
+\end{center}
+\end{table} 
+
+Up through July 20, 2015, the raw OONI http requests data consist of 2,505 reports, 2,574,326 (Tor, non-Tor) request pairs, and 102,865 distinct URLs. We applied a number of restrictions to the raw data to obtain a subset useful for our analysis:
+\begin{itemize}
+\item We discarded reports before September 2014. Reports from after this date (82\% of the total) occur more regularly than those from before it;
+\item We discarded URLs with a small number (less than 100) of request pairs. The great majority of distinct URLs were tested only a handful of times and thus not appropriate for our analysis. Though only 2\% of URLs occur often enough, they account for 89\% of all request pairs;
+\item We discarded request pairs where one or both responses were missing. A response to an http requests probe is supposed to be either an HTTP response (i.e., with a status code such as 200), or else an indication of timeout or rejection. About 20\% of request pairs are anomalous and are missing a response data structure, but they are concentrated in a tiny fraction of reports and URLs.
+\end{itemize}
+
+\section{Mathematical Analysis}
+\subsection{Long-Lived Flows}
+We first consider a simplified model, in which all flows start at the same known time s and have the same known duration $l$ (basically, $[s,s+l]$ is our observation window). The only factor distinguishing the flows is their (unknown) rate $r$. We get:
+\begin{equation}
+\label{1}
+P(y) = \int_{r}^{} P(y|r)P(r)= \int_{r}^{} e^{-rql} (rq dt)^{n_{y}}P(r).
+\end{equation}
+where $P(r)$ – our prior information about the rate $r$.  
+
+Since $r$ is a positive parameter, we express our complete lack of prior knowledge by using the scale-invariant Jeffrey’s ignorance prior $P(r) 
+\sim r -1 dr$. This basically says that log r is distributed uniformly: the probability of $r \in [a,b]$ is proportional to $log(\frac{b}{a})$. For example, $r \in [1,10]$ and $r \in [10,100]$ have the same probability.
+\begin{equation}
+\label{2}
+\int_{r}^{} (rq dt)^{n_{y}} e^{-rql} P(r) = (q dt) \int_{r=0}^{\infty} r^{n} y^{-1} e^{-rql} dr = \frac{dt^{n_{y}}}{l^{n_{y}}}.
+\end{equation}
+
+We used $\int_{0}^{\infty} z^{a-1} e^{-bz} dy = \frac{\Gamma(a)}{b^a}$; for integer $n$ we have $\Gamma(n) = (n - 1)!$.
+
+Similarly,
+\begin{equation}
+\label{3}
+P(x,y) = \int_{r}^{} (rq dt)^{n_{x}+n_{y}} e^{-2rql} P(r) = \frac{dt^{n_{x}+n_{y}}}{2l^{n_{x}+n_{y}}}.
+\end{equation}
+
+Lack of source/destination addresses in NDN helps privacy, since NDN packets carry information only about what is requested but not who is requesting it. However, a closer look reveals that this is insufficient. In particular, NDN design introduces three important privacy challenges: 
+
+\begin{enumerate}
+\item Name privacy: NDN content names are incentivized to be semantically related to the content itself. Similar to HTTP headers, names reveal significantly more information about content than IP addresses. Moreover, an observer can easily determine when two requests refer to the same (even encrypted) content;
+\item Content privacy: NDN allows any entity that knows a name to retrieve corresponding content. Encryption in NDN is used to enforce access control and is not applied to publicly available content. Thus, consumers wanting to retrieve public content cannot rely on encryption to hide what they access;
+\item Cache privacy: as with current web proxies, network neighbors may learn about each others’ content access using timing information to identify cache hits;
+\item Signature privacy: since digital signatures in NDN content packets are required to be publicly verifiable, identity of a content signer may leak sensitive information.
+\end{enumerate}
+
+\end{spacing}
+\end{document}
