@@ -1,0 +1,191 @@
+\documentclass[acmsmall]{acmart}
+
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+
+
+
+
+
+\begin{document}
+
+
+\title{An Intelligent Model for Facial Skin Colour Detection}
+
+
+\author{Panakshin Andrey}
+\author{Milekhin Alexandr}
+\email{webmaster@marysville-ohio.com}
+\affiliation{%
+  \institution{Samara University}
+  \city{Samara}
+  \country{Russian Federation}
+}
+
+
+\maketitle
+
+\section{Literature Review}
+\subsection{RGB and CIELAB Conversions}
+Since RGB colour models are device-dependent, there is no simple formula for conversion between RGB values and L-a-b-. The RGB values must be transformed via a specific absolute colour space. This adjustment will be device-dependent, but the values resulting from the transform will be device-independent. After a device-dependent RGB colour space is characterized, it becomes device-independent. In the calculation of sRGB from CIE, XYZ is a linear transformation, which may be performed by a matrix multiplication. Referring to equations \ref{1} and \ref{2}, it presents that these linear RGB values are not the final result as they have not been adjusted for the gamma correction. sRGB was designed to reflect a typical real-world monitor with a gamma of 2.2, and the following formula transforms the linear RGB values into sRGB. Let $C_{linear}$ be $R_{linear}$  , or $B_{linear}$, and $C_{srgb}$  be $R_{srgb}$, $G_{srgb}$, or $B_{srgb}$. The sRGB component values $R_{srgb}$ , $G_{srgb}$ , $B_{srgb}$ and are in the range 0 to 1 (a range of 0 to 255 can simply be divided by 255.0).
+
+\begin{equation}\label{1}
+\ C_{linear}=
+\begin{cases}
+\frac{C_{srgb}}{12.92}, & C_{srgb} \leq 0.04045,\\
+\left(\frac{C_{srgb}+a}{1+a}\right)^{2.4}, & C_{srgb} > 0.04045,
+\frac{}{}
+
+\end{cases}
+\end{equation}
+
+\noindent where a = 0.055 \\
+\noindent C is R, G, or B. 
+
+
+\! It is followed by a matrix multiplication of the linear values to get XYZ:
+\begin{equation} \label{2}
+\begin{bmatrix}
+X\\
+Y\\
+Z
+\end{bmatrix} =
+\begin{bmatrix}
+0.41240.35760.1805\\
+0.21260.71520.0722\\
+0.01930.11920.9505
+\end{bmatrix}
+\begin{bmatrix}
+R_{linear}\\
+G_{linear}\\
+B_{linear}
+\end{bmatrix}
+\end{equation}
+
+
+
+\subsection{Taguchi Method}
+The Taguchi method is used to make the designed product to have stable quality and small fluctuation and makes the production process insensitive to every kind of noise. In the product design process, it uses relations of quality, cost, and profit to develop high-quality product under condition of low cost. 
+
+\subsection{Ellipsolid Skin-Colour Model}
+Zeng and Luo conducted the studies in human skin colour luminance dependence cluster shape discussed in the Lab colour space. e cluster of skin colours may be approximated using an elliptical shape. Let $X_{1}$,$X_{2}$,… ,$X_{n}$ be distinctive colours (a vector with two or three coordinates) of a skin colour training data set and f($X_{i}$ )=$f_{i}$(i=1,2,...,n) be the occurrence counts of a colour, Xi. An elliptical boundary model $\Phi$(X) = (X,$\Psi$, $\Lambda$) is defined as
+\begin{equation} 
+\Phi(X)=
+\begin{bmatrix}
+X-\Psi
+\end{bmatrix}^{T}
+\Lambda^{-1}
+\begin{bmatrix}
+X-\Psi
+\end{bmatrix},
+\end{equation}
+
+\noindent where $\Psi$ and $\Lambda$ are given by
+
+
+\begin{equation}
+\Psi=
+\frac{1}{n}
+\sum_{i=1}^{n}X_{i},
+\end{equation}
+
+\begin{equation}
+\Lambda=
+\frac{1}{n}
+\sum_{i=1}^{n}f_{i}
+(X_{i}-\mu)
+(X_{i}-\mu)^T,
+\end{equation}
+
+
+\noindent where $\Lambda$=  
+$\frac{1}{n}$
+$\sum_{i=1}^{n}f_{i}$,
+is the total number of occurrences in a training data set and \\
+$\mu$=
+$\frac{1}{n}$
+$\sum_{i=1}^{n}f_{i}X_{i}$ 
+the mean of colour vectors. To consider the lightness dependency of the shape of skin cluster, the cluster of skin colours in a lightness-chrominance colour space may be modeled with an ellipsoid.   
+
+\section{Result and Discussion}
+\subsection{Verification for 6 Points to Detect Facial Color}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=130mm]{face.jpg}
+    \caption{The traditional procedure to capture skin colour}
+    \label{face}
+    \end{figure}
+In the course of the study, it is assumed that the typical image processing software (eg., Photoshop and CorelDraw) is as shown in different steps in Figure \ref{face}. There is a step-by-step procedure,Figure \ref{face}(a), which means that the file has been read. As for Figure \ref{face}(b), it shows that the background has been cut out and completely ensured the face shape. User could capture the skin colour manually. 
+\subsection{FaceRGB Program}
+The procedure of the FaceRGB program is as follows:
+\begin{enumerate}
+\item Calculate Faceskin data. All points of the average distance to FaceLABavg (Eavg) and standard deviation $\sigma$;
+\item Outlier is far from the distance of FaceLABavg (Distanceavg +  2$\sigma$); 
+\item According to CIE2000;
+\item Delete the outlier from the six points;
+\end{enumerate}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=130mm]{fig2.jpg}
+    \caption{Instruction for SCE operation}
+    \label{fig2}
+\end{figure}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=130mm]{fig3.jpg}
+    \caption{Processing by single image.}
+    \label{fig3}
+\end{figure}
+\begin{minipage}{\textwidth}
+
+\end{minipage}
+
+The FaceRGB program is described individually as follows:
+
+\begin{itemize}
+\item Open the program, the title indicates FaceRGB;
+\item When the file has been read, the image will appear in this picture window; it includes big data read or operation. There is instant synchronization status presenting in the window;
+\item Spreadsheet progress strip windows, the situation will progress to the long schedule for a presentation to show they reached results.;
+\item For big data, create four computation channels in the program, and it will be dealing with huge data in the same time. Figure 8 shows the situation as it is working;
+\item Option is designed to be read as a single image or input for only one time;
+\item This is a single image processing result, including the colour, RGB values, and LAB values;
+\item Figure \ref{fig2}, \ref{fig3} and Table \ref{tab1} presents the example;
+\end{itemize}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|p{3cm}|p{3cm}|c|c|c|c|}
+\hline
+Level of control factors & Sublevel of control factors &  Level & Level 1 & Level 2 & Level 3\\
+\hline
+Chin &  Radian & A & -1 & 0 & \\
+\hline
+Chin & Points & B & 3 & 25 & 50\\
+\hline
+R-cheek & Radian & C & -1 & 0 & +1\\
+\hline
+R-cheek & Points & D & 3 & 25 & 50\\
+\hline
+L-cheek & Radian & E & -1 & 0 & +1\\
+\hline
+L-cheek & Points & F & 3 & 25 & 50\\
+\hline
+Forehead & Radian & G & -1 & 0 & +1\\
+\hline
+Forehead & Points & H & 3 & 25 & 50\\
+\hline
+\end{tabular}
+    \caption{ A control factor table that may be generated for the colour detection}
+    \label{tab1}
+\end{table}
+
+
+
+
+
+\end{document}
+\endinput
+%%
+%% End of file `sample-acmsmall.tex'.
