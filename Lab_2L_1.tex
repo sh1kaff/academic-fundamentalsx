@@ -53,7 +53,13 @@ Let, \textit{f} be a function of the set P1 of primary inputs and state-element 
 
 \subsubsection{Choice of Optimal Set of Nodes for Modification}
 
-The practical level of obfuscation is estimated by the amount of verification mismatch reported by a Formal Verification based equivalence checker tool. Formal equivalence checker tools essentially try to match the input logic cones at the state-elements and the primary outputs of the reference and the implementation. Thus, in determining the suitability metric for a node as a candidate for modification, both these factors need to be considered. The following metric is proposed as the suitability metric for a node:$$M_{node}=\left(\frac{\omega_1\cdot FO}{FO_{max}}+\frac{\omega_2\cdot FI}{FI_{max}}\right)\times\frac{FO\cdot FI}{FO_{max}\cdot FI_{max}},$$\\
+The practical level of obfuscation is estimated by the amount of verification mismatch reported by a Formal Verification based equivalence checker tool. Formal equivalence checker tools essentially try to match the input logic cones at the state-elements and the primary outputs of the reference and the implementation. Thus, in determining the suitability metric for a node as a candidate for modification, both these factors need to be considered. The following metric is proposed as the suitability metric for a node:
+
+\begin{equation} %updated
+    M_{node}=\left(\frac{\omega_1\cdot FO}{FO_{max}}+\frac{\omega_2\cdot FI}{FI_{max}}\right)\times\frac{FO\cdot FI}{FO_{max}\cdot FI_{max}},
+    where
+\end{equation}
+
 where $M_{node}$ - obfuscation metric for a node;\\
 $FI$ and $FO$ - the number of nodes in the fan-in and the fan-out cone of the node, respectively;\\
 $FI_{max}$ and $FO_{max}$ - the maximum number of fan-in and fan-out nodes in the circuit netlist and are used to normalize the metric;\\
