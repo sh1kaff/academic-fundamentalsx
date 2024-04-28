@@ -1,0 +1,102 @@
+\documentclass[12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{multicol}
+\usepackage[T2A]{fontenc}
+\usepackage{setspace}
+\renewcommand{\rmdefault}{cmr}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\ttdefault}{cmtt}
+
+\begin{document}
+
+\tableofcontents
+\newpage
+\section {Related technology}
+\subsection{STCs framework}
+The current steganography methods based on AAC are not adaptive to audio content, therefore, the algorithm works better in one style of audio but works poorly in another style. The STCs framework, which depends on the content of the cover elements for embedding, can effectively solve this problem and also the problem of minimal distortion.  Different adjust can reach the theoretical minimum. Suppose that the binary vector $X = (x1, x2, ... , xn) \in 0$, 1n is the vector of cover elements, $Y = (y1, y2, ... , yn) \in 0$, 1n is the vector of stego elements, and  $m = (m1, m2, ... , mk) \in 0$, 1k is the binary vector of the secret message. According to Fig. \ref{Pic1}. The additive distortion function can be defined according. Intermediate Protocols
+\begin{figure}[H]
+    \label{Pic1}
+    \centering
+    \includegraphics[width=1\linewidth]{Pict1.png}
+    \caption{MDCT coefficient diagram}
+\end{figure}
+\begin{table}[!ht]
+    \label{tab}
+    \begin{doublespace}
+        \caption{Huffman codebook}
+    \end{doublespace}
+    \centering
+    \begin{tabular}[width=1\linewidth]{c c c}
+        \hline
+        Codebook number  & Number of data &\textit{Maximum absolute value}\\
+        \hline
+        0 & \setminus & 0 \\
+        1 2 & 4 & 1 \\
+        3 4 & 4 & 0 \\
+        5 6 & 2 & 4 \\
+        7 8 & 2 & 7 \\
+        9 10 & 2 & 12 \\
+        11 & 2 & 16(ESC) \\
+        \hline
+    \end{tabular}
+\end{table}
+\subsection{New distortion function}
+In the STCs framework[\ref{tab}], the determination of the distortion function is particularly crucial. To ensure the overall quality of audio, the distortion function definition in this paper comprehensively considers auditory and data distortions. A psychoacoustic model is used to estimate the auditory distortion function, as it can estimate the maximum allowable distortion value of the audio signal according to Fig. \ref{Pic2}. The calculation equation is as follows:
+\begin{equation}
+     T_q (f) = 3.64(\frac{f}{1000})^{-0.8} - 6.5e^{-0.6(\frac{f}{1000} - 3.3)^2} + 10^{-3}(\frac{f}{1000}^4),
+     \label{form1}
+\end{equation}
+where f is the frequency of the audio signal. 
+
+After obtaining the auditory distortion of the cover elements, the chosen cover element is the fourth element of each group in the Huffman code. Therefore, the data distortion of each cover element should comprehensively consider the effects of the other three QMDCT coefficients in the group and the next QMDCT coefficient of the cover element. Data distortion is defined according to [\ref{form1}].
+\begin{equation}
+    D(Z^j_i) = \sum_{k \in K}( \mid Z^{j+1}_i\mid + \mid z^{k}_i\mid + \alpha)^{-1},
+    \label{form2}
+\end{equation}
+where D($Z^j_i$) represents the data distortion of the jth element of the ith frame;
+    $\mid Z^{j+1}_i\mid$  represents the absolute value of the j+1-th element of the ith frame;
+    $\mid z^{k}_i\mid$  belongs to set K, which represents the set of the other three elements in the Huffman coding group;[\ref{form2}]
+    
+    $\alpha$ the adjustment parameters, which is determined experimentally.
+
+    After obtaining the auditory and data distortions, we have combined the auditory and data distortions to accurately obtain the overall distortion of each cover element. For a precise experiment, we first normalize the auditory distortion to min–max. The overall distortion function is given according.
+
+\begin{equation}
+    L(Z^j_i) = D(Z^j_i) - \log_2 T^\prime_q (f) + \beta,
+    \label{form3}
+\end{equation}
+    where $L(Z^j_i)$  is the overall distortion of the jth element of the ith frame;
+
+    $\beta$ is a fixed value to ensure that $L(Z^j_i)$ ) is always positive, the specific value is determined experimentally.
+\begin{itemize}
+\item[$-$] If  find primes is to generate random numbers and then try to factor them. The right
+way is to generate random numbers and test if they are prime;
+\item[$-$]If every atom in the universe needed a billion new primes every microsecond from the beginning of time until now, you would only need 10 109 primes; there would still be approximately 10 151 512-bit primes left.
+\end{itemize}
+\section{Proposed algorithm}
+\subsection{Determine the cover elements}
+Three styles of music and ten pieces of each style with duration of 10 s are tested, and the usage frequency of their codebooks is calculated. As shown in Fig. \ref{Pic2}, the usage rate of codebook 1/2/3/4 is significantly higher than that of the other codebooks. Therefore, this codebook has a sufficient embedding space.
+\begin{figure}[H]
+    \label{Pic2}
+    \centering
+    \includegraphics[width=1\linewidth]{Pict2.png}
+    \caption{Usage rate of codebooks.}
+\end{figure}
+\subsection{Embedding process}
+The cover elements are modified to embed secret messages. The embedding process is illustrated in Fig. \ref{Pic3}. The specific steps are as follows: 
+\begin{enumerate}
+\item The secret message is preprocessed. To increase confidentiality, the original binary sequence of the secret message is transformed. Suppose that the number of cover elements is C and the length of the binary sequence of the secret message is M. According to the STCs framework described, it should be guaranteed that C$>$M;
+\item During AAC encoding, when the Huffman encoding module obtains the fourth QMDCT coefficients of each group in codebook 1/2/3/4 and their overall distortion, the pre-cover element set is obtained; 
+\item The audio is input to the Madmom framework to obtain n beats of the audio: $R = $($R_1, R_2, ... , R_n)$, and the locations of the QMDCT coefficient corresponding to each beat are calculated: $P = $($P_1, ... , P_n)$. Notably, the QMDCT coefficient corresponding to the beat does not necessarily belong to the pre-cover element set, in this case, the nearest QMDCT close to the QMDCT that belongs to the set of pre-cover elements should be selected to replace the anchor point. The n anchor points divide the pre-cover elements into unequal n + 1 groups, and the number of pre-cover elements in each group is $S = $($S_1, ... , S_{n+1})$. The rules for determining the final cover element set are as follows.
+\end{enumerate}
+\begin{figure}[H]
+    \label{Pic3}
+    \centering
+    \includegraphics[width=1\linewidth]{Pict3.png}
+    \caption{Flowchart of secret information embedding.}
+\end{figure}
+\end{document}
