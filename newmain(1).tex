@@ -1,0 +1,107 @@
+
+\documentclass[9pt,a4paper,twoside]{tau}
+
+\usepackage[english]{babel}
+\usepackage{tau}
+\usepackage{float}
+\usepackage{ amssymb }
+\usepackage{ dsfont }
+
+%----------------------------------------------------------
+
+\begin{document}
+	
+    \thispagestyle{firststyle}
+   % \abscontent
+    \tableofcontents
+
+%----------------------------------------------------------
+
+\section{Experiments}
+
+    \taustart{W}e conducted a series of experiments to measure the NKN’s predictive ability in several settings: time series, regression benchmarks, and texture images. We focused in particular on extrapolation, since this is a strong test of whether it has uncovered the underlying structure. Furthermore, we tested the NKN on Bayesian Optimization, where model structure and calibrated uncertainty can each enable more efficient exploration.
+
+    \subsection{Activation function}
+	
+        Analogously to ordinary neural nets, each layer may also include a nonlinear activation function, the pre-activations, are the result of a linear combination or product. However, f must be selected with care in order to ensure closure of the kernels. Polynomials with positive coefficients, as well as the exponential function, fulfill this requirement.
+        \begin{equation} \label{ec:f1}
+			y_{n} = f(x_n) + \epsilon_n,\ \epsilon_n ~ N(0,\sigma^2)
+		\end{equation} 
+  Allowing units in NKN to represent complex-valued kernels as in Definition 1 and take the real component only at the end, can make the network’s representations significantly more compact. As complexvalued kernels also maintain closure under summation and multiplication (Yaglom, 2012), additional modifications are unnecessary. In practice, we can include in our primitive kernels.
+  \begin{itemize}
+  \item[-]True labels: the original dataset without modification;
+  \item[-] Partially corrupted labels: independently with probability p, the label of each image is corrupted as a uniform random class;
+  \item[-] Random labels: all the labels are replaced with random ones; 
+   \item[-]Shuffled pixels: a random permutation of the pixels is chosen and then the same permutation is applied to all the images in both training and test set;
+  \item[-] Random pixels: a different random permutation is applied to each image independently; 
+  \item[-]Gaussian: A Gaussian distribution (with matching mean and variance to the original image dataset) is used to generate random pixels for each image.
+  \end{itemize}
+    \subsection{Regression Benchmarks}
+       Since the experiments just presented used random training/test splits, they can be thought of as measuring interpolation performance. We are also interested in measuring extrapolation performance, since this is a better measure of whether the model has captured the underlying structure. In results for Mauna and Solar are shown in Figure \ref{fig:enter-label} and Figure \ref{fig:enter-labe2} in the Appendix. All three models were able to capture the periodic and increasing patterns. However, the heuristic kernel failed to fit the data points well or capture the increasing amplitude, stemming from its lack of $PER \ast LIN$ structure. 
+       \begin{enumerate}
+       \item The effective capacity of neural networks is sufficient for memorizing the entire data set;
+       \item Even optimization on random labels remains easy. In fact, training time increases only by a small constant factor compared with training on the true labels; 
+       \item Randomizing labels is solely a data transformation, leaving all other properties of the learning problem unchanged.
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 60mm]{image1.png}
+    \caption{Extrapolation results of NKN on the Mauna datasets. Heuristic kernel represents linear combination of RBF, PER, LIN, and Constant kernels. AS represents Automatic Statistician (Duvenaud et al., 2013). The red circles are the training points, and the curve after the blue dashed line is the extrapolation result. Shaded areas represent 1 standard deviation.}
+    \label{fig:enter-label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 60mm]{image2.png}
+    \caption{Extrapolation results of NKN on the Solar datasets. Heuristic kernel represents linear combination of RBF, PER, LIN, and Constant kernels. AS represents Automatic Statistician (Duvenaud et al., 2013). The red circles are the training points, and the curve after the blue dashed line is the extrapolation result. Shaded areas represent 1 standard deviation.}
+    \label{fig:enter-labe2}
+\end{figure}
+    \subsection{Bayesian Optimization}
+       Bayesian optimization (Brochu et al., 2010; Snoek et al., 2012) is a technique for optimization expensive black-box functions which repeatedly queries the function, fits a surrogate function to past queries, and maximizes an acquisition function to choose the next query. It’s important to model both the predictive mean (to query points that are likely to perform well) and the predictive variance (to query points that have high uncertainty). Typically, the surrogate functions are estimated using a GP with a simple kernel, such as Matern.
+       \begin{equation} \label{ec:f2}
+			\sum_{i,j=1}^n c_i \bar c_j k(x_i,x_j) \ge 0
+       \end{equation}
+       But simple kernels lead to inefficient exploration due to the curse of dimensionality, leading various researchers to consider additive kernels (Kandasamy et al., 2015; Gardner et al., 2017; Wang et al., 2017). Since additivity is among the patterns the NKN can learn, we were interested in testing its performance on Bayesian optimization tasks with additive structure.
+        \begin{equation} \label{ec:f3}
+			\min_{\omega\in{R^d}}\sum _{i=1}^n loss(\omega^T x_i,y_i) 
+		\end{equation}
+   Let $X$ denote the data matrix whose i-th row is. If $X$ has rank $n$, then the system of equations has an infinite number of solutions regardless of the right-hand side. We can find a global minimum in the ERM problem (\ref{ec:f3}) by simply solving this linear system. But do all global minima generalize equally well? Is there a way to determine when one global minimum will generalize whereas another will not? One popular way to understand quality of minima is the curvature of the $loss$ function at the solution. But in the linear case, the curvature of all optimal solutions is the same.
+In light of our randomization experiments, we discuss how our findings pose a challenge for several traditional approaches for reasoning about generalization. Rademacher complexity and VC-dimension. Rademacher complexity is commonly used and flexible complexity measure of a hypothesis class. The empirical Rademacher complexity of a function class $\mathcal{F}$ on a dataset ${\{z_1,…,z_n\}}$ is defined as
+\begin{equation} \label{ec:f4}
+			\hat\Re_n (\mathcal{F})=\mathds{E}_\sigma \Biggl[\sup_{f\in\mathcal{F}}\frac{1}{n}\sum_{i=1}^n \sigma_i f(z_i)\Biggr],
+\end{equation}
+where $\sigma_1, \dots, \sigma_n \in \{\pm1\}$ are i.i.d. uniform random variables.
+
+ The resulting test RMSE and log-likelihood are shown in Table \ref{tab:tbl1}.
+ \begin{table}[H]
+                \centering
+                \caption{Test RMSE and log-likelihood for the PCA-split regression benchmarks. N denotes the number of data points.}
+    		\label{tab:tbl1}
+                \begin{tabular}{|p{7mm}|p{7mm}|p{7mm}|p{7mm}|p{7mm}|p{7mm}|p{7mm}|p{7mm}|}
+            	\toprule
+                    \multicolumn{5}{|c|}{TEST RMSE} & \multicolumn{3}{|c|}{TEST LOG-LIKELIHOOD} \\
+                    \midrule
+                    Data\-set&N&GP-RBF&GP-SM&GP NKN&GP-SM&GP-SM&GP-NKM\\
+                    \hline
+                    Bos\-ton&506&6.390&8.600&4.658&\mbox-4.063&\mbox-4.404&\mbox-3.557\\
+                    \hline
+                    Con\-crete&1031&8.531&7.591&6.242&\mbox-3.246&\mbox-3.285&\mbox-3.112\\
+                    \hline
+                    Ene\-rgy&768&0.974&0.447&0.459&\mbox-1.297&\mbox-0.564&\mbox-0.649\\
+                    \hline
+                    Kin\-8nm&8192&0.093&0.065&0.086&0.998&1.322&1.057\\
+                    \hline
+                    Naval&11934&0.000&0.000&0.000&7.222&9.037&6.442\\
+                    \hline
+                    Pow. Plant&9568&4.768&3.931&3.742&\mbox-3.076&\mbox-2.877&\mbox-2.763\\
+                    \hline
+                    Wine&1599&0.701&0.660&0.650&\mbox-1.076&\mbox-1.002&\mbox-0.972\\
+                    \hline
+                    Yacht&308&1.190&1.736&0.528&\mbox-2.896&\mbox-2.768&\mbox-0.694\\
+                    \bottomrule
+                \end{tabular}
+                    
+            \end{table}
+					
+
+
+\end{document}
