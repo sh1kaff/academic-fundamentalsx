@@ -1,0 +1,238 @@
+\documentclass[
+  manuscript=article,  %% article (default), rescience, data, software, proceedings, poster
+  layout=preprint,  %% preprint (for submission) or publish (for publisher only)
+  year=20xx,
+  volume=x,
+]{joas}
+
+
+
+
+
+
+% --- blew is the area for authors ---
+
+% remove the following two packages, and delete all \blindtext commands
+\usepackage[english]{babel} 
+\usepackage{blindtext}
+\usepackage{amsmath, amsfonts, amsthm}
+\usepackage{mathtext}
+
+
+% specify the .bib file for references
+%\addbibresource{reference.bib} 
+
+\addbibresource{reference.bib} 
+
+
+
+
+
+
+\date{}  % Remove date
+\title{ASL-3DCNN: American sign language recognition technique using 3-D convolutional neural networks
+}
+
+\author{Shikhar Sharma   Krishan Kumar}
+
+ \begin{document}
+ \maketitle
+
+
+\begin{abstract}
+The communication between a person from the impaired community with a person who does not understand sign language could be a tedious task. Sign language is the art of conveying messages using hand gestures. Recognition of dynamic hand gestures in American Sign Language (ASL) became a very important challenge that is still unresolved. In order to resolve the challenges of dynamic ASL recognition, a more advanced successor of the Convolutional Neural Networks (CNNs) called 3-D CNNs is employed, which can recognize the patterns in volumetric data like videos. The CNN is trained for classification of 100 words on Boston ASL (Lexicon Video Dataset) LVD dataset with more than 3300 English words signed by 6 different signers. $70\%$ of the dataset is used for Training while the remaining $30\%$ dataset is used for testing the model. The proposed work outperforms the existing state-of-art models in terms of precision ($3.7\%$), recall ($4.3\%$), and f-measure ($3.9\%$). The computing time (0.19 seconds per frame) of the proposed work shows that the proposal may be used in real-time applications.  %\lipsum[1]
+\end{abstract}
+
+\textbf{Keywords}: 3D CNN, Speech , ASL, Deep Learning 
+\newpage
+
+\tableofcontents{}
+
+\newpage
+%-------------------------------------------
+% Paper Body
+%-------------------------------------------
+%--- Section ---%
+\section{Introduction}
+
+\par It is known that roughly 2,500,000 people from all over the world uses sign language to communicate. ASL for word recognition is an example of two-handed sign language comprising of dynamic hand gestures for spelling American English. It incorporates hand movements in the air for communicating with others by hearing impaired. The demand for human translators for smooth communication between deaf and hearing communities is elemental. However, this is ineffectual, upscale, and inconvenient as human competence is mandatory.
+\par This achieved a good average accuracy on their dataset. However, the classifier is trained on assumed hand gestures instead of standard hand gestures. Also, the time complexity of the presented method is high. The work of Issacs et al. focuses on the recognition of static ASL fingerspelling letters. They used a wavelet feature detector on intensity maps classified using a Multi-Layer Perceptron (MLP) having 24 classes. In the ASL LVD, each sign is signed by native ASL signers. The video sequences are captured from four different viewpoints simultaneously. Two of them are frontal views, one side view, and one is a slightly zoomed view on the face of the signer. Moreover, the annotations are included on the top of the video sequences for each signer. The dataset presents challenges that are relevant to areas such as machine learning, computer vision, and data mining. It includes the discrimination of visual motion of hand gestures into thousands of classes. Figure \ref{f1} depicts the frames from a sample video sequence from three different views.
+\par Some approaches used sensor gloves and magnetic trackers, so can’t be considered as vision-based systems. While some vision-based methods are also presented for smaller vocabularies (20-100 signs) and mainly relied on color markers. The above- mentioned previous studies have attempted to tackle the problem of using the combination of image processing and machine learning techniques. These studies focus on tracking the hand motion, hand shape recognition using machine learning as well as pattern recognition techniques to classify the ASL LVD words. These words are widely used in ASL recognition. Talking about the application of ASL, it can vary from conveying the names, addresses, and most importantly communication between an impaired person and other community. The recognition of dynamic hand gestures poses many challenges in the case of ASL LVD. The motion of hands, trajectory of motion, hand shape, and multi-view information may vary drastically for different signers. Also, the variation acquired due to different camera viewpoint complicates the situation.
+\par In this paper, the authors intent to overcome the challenges posed by ASL LVD. The concept of 3-D CNN cascaded for different viewpoints is implemented to analyze the multi- modal information more competently with more accurately against the existing models.
+Also, with the advancement in hardware technologies of GPU, the use of CNN’s in computer vision challenges has increased in past few years. Therefore, we processed the video information using 3-D CNN cascaded for learning from different viewpoints. The performance of the proposal has been comprised of the existing state-of-the-art models on dynamic hand sign recognition.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Без заголовка.jpg}
+    \caption{A sample video sequence from ASL LVD}
+    \label{f1}
+\end{figure}
+
+
+
+
+
+
+
+%--- Section ---%
+\section{Proposed work}\label{sec3}
+The proposal has been divided into two sections as the ASL LVD video sequences are pre-processed and then recognized using cascaded 3-D CNNs. The major components of the proposed model are shown in Fig.\ref{f1}
+
+\subsection{Pre-processing}\label{subsec2}
+To effectively train the CNNs, some pre-processing has been done. This reduces the chances of CNNs being trained on noising elements resulting in degraded performance. Since pre-processing is only done while training the network so it is a prior expense of time. Below we outline the various pre-processing stages.
+
+
+\begin{itemize}
+  \item Each video sequence is first converted into several frames, then each frame is processed individually.
+  \item Original color frame is first converted to a gray-scale image. Then unwanted noise and spots in the frame are removed using median filtering.
+  \item The illumination variations in the frame are canceled out using Histogram equalization. To reduce the computation, each frame is resized to $512 \times 384$ and normalized to $[0, 1]$.
+  \item Each video sequence is then reduced to the size of 25 distinct frames.)
+  \item The processed frames are then combined again to form the video sequence for training 3-D CNNs.
+\end{itemize}
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Без заголовка22.jpg}
+    \caption{Work flow of the proposed model}
+    \label{f2}
+\end{figure}
+
+
+%--- Section ---%
+
+The convolution operation is widely used in the field of image processing. The convolution layers on CNN also work on the same principle. The convolution of an input $x$ with kernel $k$ is computed by \ref{eq1}, where $x$ is an image in the input layer or a feature map in the subsequent layers. The convolution kernel, $k$ is a square matrix having dimension specified by the user. The number of feature maps is a hyper-parameter that is determined experimentally. For a 3D kernel, the convolution is defined as in ( \ref{eq1} )
+\begin{equation}
+(x*y)_{ijm}=\sum^s_{p,k,r=0} (x_{i+p,j+q,m+r})\cdot (k_{s-p, s-q, s-m}) \label{eq1}
+\end{equation}
+In the case of the 3D kernel, the last dimension specifies the number of frames falls into the receptive field. It acts as the filter for searching a specific pattern in the input image. The stride defines the movement of the kernel across the input image. Lesser the stride more accurate the feature maps regarding the patterns. In our model, we took the stride of 1 in all the kernel dimensions. We used ReLU (Rectified Linear Unit) as activation function [40], which enhances the learning process of the network. For the input $x$ the output of ReLU is defined as in (\ref{eq2})
+\begin{equation}
+f(x)=\max(0,x) \label{eq2}
+\end{equation}
+
+A smooth approximation to ReLU is the analytic function also called soft plus function is defined as in (\ref{eq3})
+\begin{equation}
+f (x) = \ln(1 + e^x) \label{eq3}
+\end{equation}
+
+
+
+
+
+
+%--- Section ---%
+\par {\Huge \emph {Look at tables \ref{tab1} and \ref{tab2}}}
+
+
+\begin{table}[!ht]
+    \centering
+    \caption{ Configuration of 3-D CNN model for Sign recognition\label{tab1}}
+    \begin{tabular}{|p{6.5cm}|p{6.5cm}|}
+    \hline
+        Fully connected & neurons: 101\\ \hline
+        Dropout & Ratio : 0.5 \\ 
+        Fully connected & neurons: 1024 \\ 
+        Dropout & Ratio : 0.5 \\ 
+        Fully connected & neurons: 4096 \\ 
+    \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+\caption{ Configuration of 3-D CNN model for Sign recognition\label{tab2}}
+\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}|p{3cm}|p{3cm}|p{3cm}|p{3cm}|@{\extracolsep\fill}}
+\toprule
+Model & Precision (\%) & Recall (\%) & F-measure (\%)\\
+\midrule
+Pentland et al. & 92.3 & 92.8 & 92.5\\
+Cui et al. & 78.9 & 79.8 & 80.1 \\
+Uebersax et al. & 85.6 &87.3 & 84.9 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+
+
+
+
+
+%--- Section ---%
+\section{lalala}\label{sec6}
+
+The moment estimates are updated as in next formulas:
+
+\begin{equation*}
+    \left.\begin{aligned}
+    m_{t}=b_{1} \cdot m_{t-1}+(1-b_{1}) \cdot gt \\
+    v_{t}=b_{2} \cdot v_{t-1}+(1-b_{2}) \cdot gt_{2}
+    \end{aligned} \right\}
+    \quad \text{ where $m_{t} = m_{t}/ \left(1-b^t_{1}\right) $ and
+    $v_{t} = v_{t}/ \left(1-b^t_{2}\right)$}
+\end{equation*}
+
+
+
+The above process generates the processed video sequences having gray-scale frames. The video sequences that are processed were manually trimmed. This ensures only hand gestures and motions to be present in video sequences for training CNNs. As outlined earlier, the works presented to recognize dynamic ASL are less in number as compared to static ASL recognition. Several authors have tried various feature extraction methods followed by the use of different learning techniques like HMMs, Recursive partition tree, and ANMM. But the use of deep learning techniques has not yet been presented. So, we tried to explore the deployment of CNNs to resolve the problem of dynamic ASL recognition. Algorithm 1 elaborated the flow of the proposed model \ref{f3}.
+
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{6.jpg}
+    \caption{Various components of the proposed model}
+    \label{f3}
+\end{figure}
+
+
+\begin{equation}
+f(\theta)=-\frac{1}{n}\sum^n_{i=1}\sum^m_{j=1}y_{ij}log\left(p_{ij}\right)\label{eq6}
+\end{equation}
+
+\begin{equation}
+    \theta_{t}=\theta_{t-1}-\frac{a*m_{t}}{\sqrt{v_{t}}}\label{eq7}
+\end{equation}
+
+
+\par {\Huge \emph{Look at formulas \ref{eq8} and \ref{eq9}}}
+
+\begin{equation}
+    \frac{1}{\pi}\int\limits_{-\pi}^{\pi}(x+1)\sin{nx}dx = \frac{1}{\pi}\left(-\frac{1}{n}(x+1)\cos{nx}\Big|_{-\pi}^{\pi}+\frac{1}{n}\int\limits_{-\pi}^{\pi}\cos{nx}dx\right) \label{eq8}
+\end{equation}
+
+\begin{equation}
+    \lim_{x \to \pm\infty} x\left(\sqrt{x^2-1}-x\right) = [\infty - \infty] \label{eq9}
+\end{equation}
+
+%--- Section ---%
+\section{Conclusions}
+This work highlights ASL based dynamic gesture recognition system. It could automati- cally recognize sign language; would be beneficial for the people that use sign language to communicate. It can classify dynamic ASL hand signs into 100 different words. We showed the efficiency of using convolution neural networks on both depths as well as intensity maps for ASL fingerspelling recognition system. The evaluation of the presented work has shown the promising performance of the method with lesser time requirements. The pro- posed work outperforms the existing state-of-art models in terms of precision ($3.7\%$), recall ($4.3\%$), and f-measure ($3.9\%$). The computing time (0.19 seconds per frame) of the pro- posed work shows that the proposal may be used in real-time applications. Also, to the best of our knowledge, we are first to present the use of deep learning for ASL LVD recognition. Moreover, the challenge of using both hands can be solved using spatial transform layers along with CNN to recognize in multi-label environment.
+
+
+
+%-------------------------------------------
+% References
+%-------------------------------------------
+
+% Print bibliography
+\section{References}
+\begin{enumerate} 
+  \item \hypertarget{p1}{} Ameen S, Sunil V (2017) A convolutional neural network to classify American Sign Language fingerspelling from depth and colour images, Expert Systems 
+  \item Athitsos V et al (2008) The american sign language lexicon video dataset, Computer Vision and Pattern Recognition Workshops, IEEE Computer Society Conference on
+  \item Cheng WT, Sun Y, Li GF, Jiang GZ, Liu HH (2019) Jointly network: A network based on CNN and RBM for gesture recognition. Neural Comput Appl 31(Suppl 1):309–323
+  \item Cui Y, Juyang W (2000) Appearance-based hand sign recognition from intensity image sequences. Comput Vision Image Understand 78.2:157–176
+  \item Gao W, Fang G, Zhao D, Chen Y (2004) Transition movement models for large vocabulary continuous sign language recognition. Autom Face Gesture Recognit 553–558
+  \item Hinton G, Osindero S, Teh Y (2005) A fast learning algorithm for deep belief nets. Neural Comput 18:1527–1554
+  \item Kang B, Tripathi S, Nguyen TQ (2015) Real-time sign language fingerspelling recognition using con- volutional neural networks from depth map. In: Pattern recognition (ACPR), 3rd IAPR asian conference on. IEEE
+  \item Lecun Y, Bengio Y (1995) Convolutional networks for images, speech, and time series. The handbook of brain theory and neural networks, vol 3361
+  \item Koller O et al (2019) Weakly supervised learning with multi-stream CNN-LSTM-HMMs to discover sequential parallelism in sign language videos. IEEE Trans Pattern Anal Machine Intell
+\end{enumerate}
+
+
+
+
+
+
+
+
+\end{document}
