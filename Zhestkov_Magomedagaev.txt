@@ -1,0 +1,162 @@
+\documentclass{article}
+
+\AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    Bib\TeX}}}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+    
+\begin{document}
+
+\tableofcontents
+\newpage
+
+\section{Material and methods}
+
+\subsection{Image Quality assessment methods}
+
+\begin{itemize}
+    \item Peak Signal-to-Noise Ratio ($PSNR$): $PSNR$ is a widely used metric for assessing the quality of reconstructed images or videos. It measures the ratio of the peak power of a signal to the power of the noise that affects the fidelity of its representation.
+    \item Structural Similarity Index ($SSIM$): $SSIM$ is a perception-based model that compares local patterns of pixel intensities that have been normalized for luminance and contrast.
+    \item Mean Opinion Score (MOS): $MOS$ is a subjective method for evaluating the quality of images or videos, where human observers rate the quality based on their perception. This method is often used in studies where the goal is to understand how an average viewer perceives the quality of visual content.
+    \item Video Quality Metrics: For video quality assessment, there are specific metrics such as Video Quality Metric ($VQM$), Perceptual Evaluation of Video Quality ($PEVQ$), and Video Quality Experts Group ($VQEG$) metrics. 
+\end{itemize}
+
+\subsection{Image Quality Measures}
+In the objective approach, the image quality is assessed by using a mathematical formula that attempts to quantify the amount of image distortion.
+\subsubsection {The signal to noise ratio ($SNR$) and Peak Signal to Noise Ratio}
+$SNR$ and $PSNR$ are a mathematical measure of image quality based on the pixel differences between two images [19, 20]. The $SNR$ measure is a calculation of the quality of a reconstructed image compared with the original image. The whole idea is to obtain a single number that reflects the quality of the image by computing the ratio of the signal power to the noise power. The $PSNR$ is the rate between the maximum possible power of a signal and the power of corrupting noise. The $PSNR$ is expressed in logarithmic level. The mathematical term for it is:
+\begin{equation} \label{eq1}
+    PSNR=20\ln{\left(\frac{MAX_f}{\sqrt{MSE}}\right)}.
+\end{equation}
+Where $MAX_f$ {---} The maximum signal value that exists in the original image
+
+\subsubsection{Mean Squared Error ($MSE$)}
+$MSE$ is a measure of control and quality. The $MSE$ is defined as follows
+\begin{equation} \label{eq2}
+    MSE=\frac{1}{M*N}\displaystyle \sum_a\sum_b\left(A(a,b)-W(a,b)\right)^2.
+\end{equation}
+Where $A(a, b)$ — is the original image and $W(a, b)$ — is the distorted image
+that contain $M*N$ pixels.
+
+\subsubsection{Universal Image Quality Index ($UIQI$)}
+The $UIQI$ is a mathematically defined measurement, that is easy to compute and independent of viewing conditions. In 2002, Wang and Bovik proposed this measure [5], it breaks the comparison between distorted and original image into three comparisons: contrast, structural, luminance and comparisons as in (\ref{eq3}), (\ref{eq4}), and (\ref{eq5}). The dynamic range for the quality index is [-1; 1], where 1 represents a perfect image quality.
+\begin{equation} \label{eq3}
+    l(x,y)=\frac{2\mu_x*\mu_y}{\mu_x^2+\mu_y^2}.
+\end{equation}
+
+\begin{equation} \label{eq4}
+    c(x,y)=\frac{2\sigma_x*\sigma_y}{\sigma_x^2+\sigma_y^2}
+\end{equation}
+
+\begin{equation} \label{eq5}
+    s(x,y)=\frac{2\sigma_{xy}}{\sigma_x+\sigma_y}.
+\end{equation}
+
+Where $\mu_x$ and $\mu_y$ {---} represents the mean values of distorted and original images. And $\sigma_x$ and $\sigma_y$ represents the standard deviation of distorted and original images, and $\sigma_{xy}$ is the covariance of both images. The $UIQI$ is given in (\ref{eq6}).
+
+\begin{equation} \label{eq6}
+    UIQI(x,y)=I(x,y)*c(x,y)*s(x,y)=\frac{4\mu_x\mu_y\mu_xy}{(\mu_x^2+\mu_y^2)*(\sigma_x^2+\sigma_y^2)}.
+\end{equation}
+
+\section{Experimental results}
+
+\subsection{Quality Assessment Scheme}
+
+\subsubsection{Proposed Quality Assessment Scheme}
+
+\begin{enumerate}
+    \item Convert color image $I_c$ to gray-scale image.
+    \item Compute the disoccluded region using Eqs.
+    \item Evaluate the disoccluded region $Q_1$ using Eqs.
+    \item Compute the stretching region using Eq.
+    \item Evaluate stretching strenght $Q_2$ using Eqs.
+\end{enumerate}
+
+\subsection{The tests}
+
+\subsubsection{The test of image processing}
+
+The test images used for our analysis shown were in Figure \ref{fig1}. Three different images were used, of which each one was distorted with the same type and amount of noise. Motion noise, blurring and sharpening was applied to distort the images.
+\newpage
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{Figure1.png}
+    \caption{Examples of test images used for our analysis (a) Cameraman, (b) Lena and (c) Peppers}
+    \label{fig1}
+\end{figure}
+
+First image used was the 8 bit $256*256$ grayscale cameraman image. After applying some distortion to the original images, the image quality assessments were performed on these distorted images and the results were compared. The image quality assessment for the cameraman image is shown in the results in Table \ref{tab1} shows the $UIQI$, $PSNR$, $MSE$, $RMSE$, $EME$, $EMF$, $MAE$, $SNR$ and $SIMM$ values, calculated between original and distorted images, respectively. Proposed methodology utilizes a no-reference image approach.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+         Cameraman & Motion & Blurred & Sharpened \\
+         \hline
+         Proposed & 3.5203 & 14.1384 & 1.1646 \\
+         \hline
+            UIQI & 0.2100 & 0.1097 & 0.5678 \\
+            \hline
+            PSNR & 19.8642 & 18.9878 & 19.5906 \\
+            \hline 
+            RMSE & 26.0035 & 28.7640 & 26.8355 \\
+            \hline 
+            EMF & 0.42 & 0.28 & 0.58 \\
+            \hline 
+            MAE & 14.0620 & 16.344 & 15.4276 \\
+            \hline
+
+    \end{tabular}
+    \caption{Comprasion of cameraman image quality measures}
+    \label{tab1}
+\end{table}
+
+
+The proposed algorithm was also tested on the Lena image. Lena image was an 8 bit 256x256 grayscale image. Assessment values are shown in Table \ref{tab2}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+         Lena(256x256) & Motion & Blurred & Sharpened \\
+         \hline
+         Proposed & 3.8160 & 15.3463 & 1.2064 \\
+         \hline
+            UIQI & 0.4214 & 0.2290 & 0.6718 \\
+            \hline
+            PSNR & 21.1862 & 19.6975 & 20.7449 \\
+            \hline 
+            RMSE & 22.3322 & 26.5073 & 23.4962 \\
+            \hline 
+            EMF & 0.44 & 0.28 & 0.53 \\
+            \hline 
+            MAE & 14.0620 & 18.1324 & 14.2617 \\
+            \hline
+            SNR & -2.9832 & -4.4718 & -3.4245 \\
+            \hline
+            SIMM & -2.9832 & -4.4718 & -3.4245 \\
+            \hline
+            MSE & 498.7276 & 702.6348 & 522.0695 \\
+            \hline      
+    \end{tabular}
+    \caption{Comprasion of Lena image quality measures}
+    \label{tab2}  
+\end{table}
+
+The clarity of image is expected to decrease when a motion or blur distortion is applied. And, the clarity of image is expected to increase when a sharpening is applied. Accordingly, the $SIMM$ and $UIQI$ parameters provide the scores in each of the Tables. The proposed method may give information about the clarity, inversely proportional to these two parameters. Proposed value decreases with increasing clarity. A lower proposed value indicates a better quality image. So, it can give information about the image. The higher this value is so much noise. The cameraman image was also blurred with two different noises: Gaussian and disk-shaped blur. First, the cameraman image was blurred with Gaussian blur at different values of $sigma = 0.5, 1.0, 2.0, 2.5$. Then, the image was further blurred with disk-blur with $se = 5, 10, 12, 15$.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{Figure2.png}
+    \caption{Shown that changed proposed value with noise, (b) shown that changed $UIQI$ value with noise.}
+    \label{fig2}
+\end{figure}
+
+The blurred images and respective proposed values changed depending on the noise levels are shown in Figure \ref{fig2} indicates the relationship between the proposed image quality assessment and the amount of blurring applied to the cameraman image for different values of sigma.
+
+\end{document}
