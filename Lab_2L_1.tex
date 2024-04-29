@@ -1,4 +1,5 @@
 \documentclass{optica-article}
+%\documentclass[manuscript,screen,review]{acmart
 \usepackage[russian,english]{babel}
 \usepackage{amsmath, amsfonts, amsthm}
 \usepackage{mathtext}
@@ -60,7 +61,7 @@ The practical level of obfuscation is estimated by the amount of verification mi
     where
 \end{equation}
 
-where $M_{node}$ - obfuscation metric for a node;\\
+$M_{node}$ - obfuscation metric for a node;\\
 $FI$ and $FO$ - the number of nodes in the fan-in and the fan-out cone of the node, respectively;\\
 $FI_{max}$ and $FO_{max}$ - the maximum number of fan-in and fan-out nodes in the circuit netlist and are used to normalize the metric;\\
 $\omega_1$ and $\omega_2$ - weights assigned to the two factors, with $0\leq\omega_1$, $\omega_2\leq1$ and $\omega_1 + \omega_2 = 1$. The values $\omega_1 = \omega_2 = 0.5$ were chosen because they gave the best results in terms of obfuscation, as shown in the next section.
