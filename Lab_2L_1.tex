@@ -1,5 +1,5 @@
 \documentclass{optica-article}
-%\documentclass[manuscript,screen,review]{acmart
+%\documentclass[manuscript,screen,review]{acmart}
 \usepackage[russian,english]{babel}
 \usepackage{amsmath, amsfonts, amsthm}
 \usepackage{mathtext}
@@ -44,7 +44,7 @@ Let, \textit{f} be a function of the set P1 of primary inputs and state-element 
 \indent The “+1” factor in the denominator is due to the \textit{en} signal.\\
 \indent To estimate the obfuscation level against a manual mode of attack, we propose a new metric called semantic obfuscation metric ($M_{sem}$), which depicts how many of the original high level RTL constructs have been replaced by new ones. We define $M_{sem}$ by:
 
-\begin{equation} %new equation
+\begin{equation}
     \label{equation:4}
     M_{sem}=\frac{abs(N_{c,orig}+N_{w,orig}+N_{e,obfus}-N_{raw,obfus})}{max(\{N_{c,orig}+N_{w,orig}+N_{e,obfus}\},N_{raw,obfus})}
 \end{equation}
@@ -56,10 +56,11 @@ Let, \textit{f} be a function of the set P1 of primary inputs and state-element 
 
 The practical level of obfuscation is estimated by the amount of verification mismatch reported by a Formal Verification based equivalence checker tool. Formal equivalence checker tools essentially try to match the input logic cones at the state-elements and the primary outputs of the reference and the implementation. Thus, in determining the suitability metric for a node as a candidate for modification, both these factors need to be considered. The following metric is proposed as the suitability metric for a node:
 
-\begin{equation} %updated
-    M_{node}=\left(\frac{\omega_1\cdot FO}{FO_{max}}+\frac{\omega_2\cdot FI}{FI_{max}}\right)\times\frac{FO\cdot FI}{FO_{max}\cdot FI_{max}},
-    where
-\end{equation}
+\begin{center} %update
+$
+      M_{node}=\left(\frac{\omega_1\cdot FO}{FO_{max}}+\frac{\omega_2\cdot FI}{FI_{max}}\right)\times\frac{FO\cdot FI}{FO_{max}\cdot FI_{max}},
+$    where
+\end{center}
 
 $M_{node}$ - obfuscation metric for a node;\\
 $FI$ and $FO$ - the number of nodes in the fan-in and the fan-out cone of the node, respectively;\\
@@ -132,7 +133,7 @@ Table \textbf{\ref{tab:Table 1}} shows: the simple node modification scheme usin
 
 \indent The effectiveness of the proposed key-based obfuscation scheme:
 
-\begin{equation} %new equation
+\begin{equation}
     \label{equation:5} 
     M_{obf}=\frac{1}{\Biggl[ \sum\limits_{i=2}^{\lceil M_{av}\rceil} \Bigl(\genfrac{}{}{0pt}{}{L\ +\ l}{i} \Bigr)\times i! \Biggl]\times\Bigl(\genfrac{}{}{0pt}{}{C\ +\ c}{c} \Bigr)\times\Bigl(\genfrac{}{}{0pt}{}{N\ +\ n\ -\ L\ -\ C\ -\ l\ -\ c
 }{n\ -\ l\ -\ c} \Bigr)}
