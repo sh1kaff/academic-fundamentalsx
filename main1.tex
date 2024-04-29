@@ -57,11 +57,7 @@ Entropy measures the degree of privacy protection from the perspective of the un
 To measure the data utility of the perturbed location, the expected distance between the released location and the actual location, which is also commonly referred to as quality of loss (\ref{f1}), can be a general utility metric independent of specific location-based applications and has been adopted as the standard by the community:
 \begin{equation}
 \label{f3}
-    W^i_e = 
-    \begin{cases}
-    0, &\text{$(x^h<x^l)$ or $(x^h == x^l$ and $q^i > 0)$}\\
-    1, &\text{$(x^h \ge x^l)$ or $(x^h==x^l$ and $q^i == 0)$}
-    \end{cases}
+  \prod _{LM}\left ( D,g(D)) \right )=\frac{1}{nr}\cdot \sum_{i=1}^{n}\sum_{j=1}^{r}\frac{\left | \bar{R}(j)) \right |  -1}{\left | A_{j} \right | -1}
 \end{equation}
 
 \subsection{Open Issues in Existing LPPMs}
