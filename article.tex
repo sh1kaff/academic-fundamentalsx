@@ -1,3 +1,4 @@
+%\documentclass[12pt]{ledger}
 \documentclass[12pt]{spieman}
 \usepackage{amsmath,amsfonts,amssymb}
 \usepackage{graphicx}
@@ -121,7 +122,7 @@ Up through July 20, 2015, the raw OONI http requests data consist of 2,505 repor
 We first consider a simplified model, in which all flows start at the same known time s and have the same known duration $l$ (basically, $[s,s+l]$ is our observation window). The only factor distinguishing the flows is their (unknown) rate $r$. We get:
 \begin{equation}
 \label{1}
-P(y) = \int_{r}^{} P(y|r)P(r)= \int_{r}^{} e^{-rql} (rq dt)^{n_{y}}P(r).
+P(y) = \int\limits_{r}^{} P(y|r)P(r)= \int\limits_{r}^{} e^{-rql} (rq dt)^{n_{y}}P(r).
 \end{equation}
 where $P(r)$ – our prior information about the rate $r$.  
 
@@ -129,15 +130,15 @@ Since $r$ is a positive parameter, we express our complete lack of prior knowled
 \sim r -1 dr$. This basically says that log r is distributed uniformly: the probability of $r \in [a,b]$ is proportional to $log(\frac{b}{a})$. For example, $r \in [1,10]$ and $r \in [10,100]$ have the same probability.
 \begin{equation}
 \label{2}
-\int_{r}^{} (rq dt)^{n_{y}} e^{-rql} P(r) = (q dt) \int_{r=0}^{\infty} r^{n} y^{-1} e^{-rql} dr = \frac{dt^{n_{y}}}{l^{n_{y}}}.
+\int\limits_{r}^{} (rq dt)^{n_{y}} e^{-rql} P(r) = (q dt) \int\limits_{r=0}^{\infty} r^{n} y^{-1} e^{-rql} dr = \frac{dt^{n_{y}}}{l^{n_{y}}}.
 \end{equation}
 
-We used $\int_{0}^{\infty} z^{a-1} e^{-bz} dy = \frac{\Gamma(a)}{b^a}$; for integer $n$ we have $\Gamma(n) = (n - 1)!$.
+We used $\int\limits_{0}^{\infty} z^{a-1} e^{-bz} dy = \dfrac{\Gamma(a)}{b^a}$; for integer $n$ we have $\Gamma(n) = (n - 1)!$.
 
 Similarly,
 \begin{equation}
 \label{3}
-P(x,y) = \int_{r}^{} (rq dt)^{n_{x}+n_{y}} e^{-2rql} P(r) = \frac{dt^{n_{x}+n_{y}}}{2l^{n_{x}+n_{y}}}.
+P(x,y) = \int\limits_{r}^{} (rq dt)^{n_{x}+n_{y}} e^{-2rql} P(r) = \frac{dt^{n_{x}+n_{y}}}{2l^{n_{x}+n_{y}}}.
 \end{equation}
 
 Lack of source/destination addresses in NDN helps privacy, since NDN packets carry information only about what is requested but not who is requesting it. However, a closer look reveals that this is insufficient. In particular, NDN design introduces three important privacy challenges: 
@@ -149,5 +150,15 @@ Lack of source/destination addresses in NDN helps privacy, since NDN packets car
 \item Signature privacy: since digital signatures in NDN content packets are required to be publicly verifiable, identity of a content signer may leak sensitive information.
 \end{enumerate}
 
+\begin{equation}
+\label{4}
+A_{if\genfrac{}{}{0pt}{}{r}{i}} = \{ d | Pr [d \rightarrow_{int} r | int \rightarrow if\substack{r\\i}] > 0\}.
+\end{equation}
+
+\begin{equation}
+\label{5}
+\sum_{i=1}^K f'(X_i|\beta) \log f'(X_i|\beta) \rightarrow \frac{K}{T} \int\limits_{\beta - T}^{\beta} f'(t|\beta) \log f'(t|\beta)dt \rightarrow \lambda_\alpha \mathcal{E}[f'(\alpha|\beta)]
+\end{equation}
+
 \end{spacing}
-\end{document}
+\end{document} 
