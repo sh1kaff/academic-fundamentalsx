@@ -1,0 +1,236 @@
+\documentclass[12pt,a4paper]{article}
+
+% Language setting
+\usepackage[british]{babel}
+
+% Set page size and margins
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.75cm]{geometry}
+
+%----------- APA style references & citations (starting) ---
+% Useful packages
+%\usepackage[natbibapa]{apacite} % APA-style citations.
+
+\usepackage[style=apa, backend=biber]{biblatex} % APA 7th edition style citations using biblatex
+\addbibresource{references.bib} % Your .bib file
+
+% Formatting DOI in APA-7 style
+%\renewcommand{\doiprefix}{https://doi.org/}
+
+% Add additional APA 7th edition requirements
+\DeclareLanguageMapping{british}{british-apa} % Set language mapping
+\DeclareFieldFormat[article]{volume}{\apanum{#1}} % Format volume number
+
+% Modify 'and' to '&' in the bibliography
+\renewcommand*{\finalnamedelim}{%
+  \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+  \addspace\&\space}
+  
+%----------- APA style references & citations (ending) ---
+
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{hyperref}
+%\usepackage{orcidlink}
+\usepackage[title]{appendix}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{booktabs} % For \toprule, \midrule, \botrule
+\usepackage{caption}  % For \caption
+\usepackage{threeparttable} % For table footnotes
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{subcaption}
+\usepackage{authblk}
+\usepackage[T1]{fontenc}    % Font encoding
+\usepackage{csquotes}       % Include csquotes
+\usepackage{diagbox}
+
+
+% Customize line spacing
+\usepackage{setspace}
+\onehalfspacing % 1.5 line spacing
+
+% Redefine section and subsection numbering format
+\usepackage{titlesec}
+\titleformat{\section} % Redefine section numbering format
+  {\normalfont\Large\bfseries}{\thesection.}{1em}{}
+  
+% Customize line numbering format to right-align line numbers
+\usepackage{lineno} % Add the lineno package
+\renewcommand\linenumberfont{\normalfont\scriptsize\sffamily\color{blue}}
+\rightlinenumbers % Right-align line numbers
+
+ % Enable line numbering
+
+% Define a new command for the fourth-level title.
+\newcommand{\subsubsubsection}[1]{%
+  \vspace{\baselineskip}% Add some space
+  \noindent\textbf{#1\\}\quad% Adjust formatting as needed
+}
+% Change the position of the table caption above the table
+\usepackage{float}   % for customizing caption position
+\usepackage{caption} % for customizing caption format
+\captionsetup[table]{position=top} % caption position for tables
+
+% Define the unnumbered list
+\makeatletter
+\newenvironment{unlist}{%
+  \begin{list}{}{%
+    \setlength{\labelwidth}{0pt}%
+    \setlength{\labelsep}{0pt}%
+    \setlength{\leftmargin}{2em}%
+    \setlength{\itemindent}{-2em}%
+    \setlength{\topsep}{\medskipamount}%
+    \setlength{\itemsep}{3pt}%
+  }%
+}{%
+  \end{list}%
+}
+\makeatother
+
+% Suppress the warning about \@parboxrestore
+\pdfsuppresswarningpagegroup=1
+
+
+%-------------------------------------------
+% Paper Head
+%-------------------------------------------
+\begin{document}
+%\maketitle
+
+%\begin{abstract}
+%Abstracts must be able to stand alone and so cannot contain citations to the paper’s references, equations, etc. An abstract must consist of a single paragraph and be concise. Because of online formatting, abstracts must appear as plain as possible. Three to six keywords must be included. Each keyword should not exceed three words. %\lipsum[1]
+%\end{abstract}
+
+%\textbf{Keywords}: keyword1, keyword2, keyword3, keyword4, keyword5, keyword6.  
+
+%-------------------------------------------
+% Paper Body
+%-------------------------------------------
+%--- Section ---%
+
+\tableofcontents
+ \newpage
+\section{Introductionl}
+
+Humans glance at an image and instantly know what objects are in the image, where they are, and how they interact. The human visual system is fast and accurate, allowing us to perform complex tasks like driving with little conscious thought. Fast, accurate algorithms for object detection would allow computers to drive cars without specialized sensors, enable assistive devices to convey real-time scene information to human users, and unlock the potential for general purpose, responsive robotic systems. Systems like deformable parts models (DPM) use a sliding window approach where the classifier is run at evenly spaced locations over the entire image . More recent approaches like R-CNN use region proposal.
+
+\begin{enumerate}
+\item Resize image.
+\item Run convolutional network. 
+\item Non-max suppression. 
+\end{enumerate}
+
+\begin{figure}[!ht]
+
+\centering
+\includegraphics[width=1\linewidth]{pic.png}
+\caption{\label{pic.png}The YOLO Detection System.}
+\end{figure}
+
+Our system (1) resizes the input image to 448 × 448, (2) runs a single convolutional network on the image, and (3) thresholds the resulting detections by the model’s confidence. 
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1\linewidth]{pic1.png}
+\caption{\label{pic1.png}S*S grid on input, etc. }
+\end{figure}
+
+ methods to first generate potential bounding boxes in an image and then run a classifier on these proposed boxes. After classification, post-processing is used to refine the bounding boxes, eliminate duplicate detections, and rescore the boxes based on other objects in the scene [13]. These complex pipelines are slow and hard to optimize because each individual component must be trained separately. We reframe object detection as a single regression problem, straight from image pixels to bounding box coordinates and class probabilities. Using our system, you only look once (YOLO) at an image to predict what objects are present and where they are. YOLO is refreshingly simple: see Figure 1.
+
+\begin{table}[!ht]
+\caption{Real-Time Detectors\label{tab0}}
+\begin{threeparttable}
+\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}|l|l|l|l|@{\extracolsep\fill}}
+\toprule
+Real-Time Detectors & Train & mAP & FPS\\
+\midrule
+100Hz DPM & 2007 & 16.0 & 100 \\
+30Hz DPM & 2007 & 26.1 & 30 \\
+Fast YOLO & 2007+2012 & 52.7 & 155 \\
+YOLO & 2007+2012 &  63.4 & 45 \\
+
+
+\bottomrule
+\end{tabular*}
+\end{threeparttable}
+\end{table}
+
+
+\begin{table}[!ht]
+\caption{Less Than Real-Time\label{tab0}}
+\begin{threeparttable}
+\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}|l|l|l|l|@{\extracolsep\fill}}
+\toprule
+Less Than Real-Time Detectors & Train & mAP & FPS\\
+\midrule
+
+Fastest DPM & 2007 & 30.4 & 15\\
+R-CNN Minus R & 2007 & 53.5 & 6\\
+Fast R-CNN & 2007+2012 & 70.0 & 0.5\\
+Faster R-CNN VGG-16 & 2007+2012 & 73.2 & 7\\
+Faster R-CNN ZF & 2007+2012 & 62.1 & 18\\
+YOLO VGG-16 & 2007+2012 & 66.4 & 21\\
+
+\bottomrule
+\end{tabular*}
+\end{threeparttable}
+\end{table}
+
+
+A single convolutional network simultaneously predicts multiple bounding boxes and class probabilities for those boxes. YOLO trains on full images and directly optimizes detection performance. This unified model has several benefits over traditional methods of object detection. First, YOLO is extremely fast. Since we frame detection as a regression problem we don’t need a complex pipeline. We simply run our neural network on a new image at test time to predict detections. Our base network runs at 45 frames per second with no batch processing on a Titan X GPU and a fast version runs at more than 150 fps. 
+
+\begin{equation}
+\label{eq1}
+    \lambda_{coord} = \sum_{i = 0}^{s^{2}} \sum_{j = 0}^{M} (\sqrt{w_{i}} - \sqrt{w_{j}})^{2}
+\end{equation}
+
+Fast R-CNN, a top detection method [14], mistakes background patches in an image for objects because it can’t see the larger context. YOLO makes less than half the number of background errors compared to Fast R-CNN. Third, YOLO learns generalizable representations of objects. When trained on natural images and tested on artwork, YOLO outperforms top detection methods like DPM and R-CNN by a wide margin. Since YOLO is highly generalizable it is less likely to break down when applied to new domains or unexpected inputs. 
+
+\begin{itemize}
+    \item CNN is a type of deep learning algorithm.
+    \item Is commonly used for image recognition tasks.
+    \item Have convolutional layers for feature extraction.
+    \item Also pooling layers for dimensionality reduction.
+
+\end{itemize}
+
+YOLO still lags behind state-of-the-art detection systems in accuracy. While it can quickly identify objects in images it struggles to precisely localize some objects, especially small ones. We examine these tradeoffs further in our experiments. All of our training and testing code is open source. A variety of trained models are also available to download. 
+
+\subsection{Unified Detection}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1\linewidth]{pic2.png}
+\caption{\label{pic2.png}Fast R-CNN. }
+\end{figure}
+
+We unify the separate components of object detection into a single neural network. Our network uses features from the entire image to predict each bounding box. It also predicts all bounding boxes across all classes for an image simultaneously. This means our network reasons globally about the full image and all the objects in the image. 
+
+\begin{equation}
+\label{eq4}
+    s_n = 
+    \begin{cases}
+    0, &\text{$\frac{g1(1-r^n )}{(1-r)}$}\\
+    1, &\text{$ e^{-g1\Delta r} f(k\Delta r)$}
+    \end{cases}
+\end{equation}
+
+
+These confidence scores reflect how confident the model is that the box contains an object and also how accurate it thinks the box is that it predicts. Formally we define confidence as Pr(Object)IOUtruth pred . If no object exists in that cell, the confidence scores should be zero. Otherwise we want the confidence score to equal the intersection over union (IOU) between the predicted box and the ground truth. Each bounding box consists of 5 predictions: x, y, w, h, and confidence.
+
+\begin{equation}
+     \lambda _ {coord} \sum _ {i=0}^ {s} \sum _ {i=0}^ {B} 1_ {ij}^ {obj} [  (x_ {i}-\widehat {}x_ {i})^ {2}  +  (y_ {i}-\widehat {y}i)^ {2} ]
++ \lambda _ {cord} \sum _ {i=0}^ {s}  \sum _ {i=0}^ {2}  10^ {b} [( \sqrt {w_ {i}}  -  \sqrt {w_ {i})^ {2}+(\sqrt {h_ {i}}-\sqrt {h_ {i}})^ {2}} 
+
+\end{equation}
+
+\end{document}
