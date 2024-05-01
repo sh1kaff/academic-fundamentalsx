@@ -1,0 +1,247 @@
+%%%%%% Шаблон 
+
+% \documentclass[12pt]{osa-supplemental-document}
+
+%%%%%% Надо закоментировать для правильной работы шаблона %%%%%%
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[british]{babel}
+
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.75cm]{geometry}
+
+
+\usepackage[style=apa, backend=biber]{biblatex} % APA 7th edition style citations using biblatex
+\addbibresource{references.bib} % Your .bib file
+
+% Add additional APA 7th edition requirements
+\DeclareLanguageMapping{british}{british-apa} % Set language mapping
+\DeclareFieldFormat[article]{volume}{\apanum{#1}} % Format volume number
+
+% Modify 'and' to '&' in the bibliography
+\renewcommand*{\finalnamedelim}{%
+  \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+  \addspace\&\space}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{hyperref}
+\usepackage{orcidlink}
+\usepackage[title]{appendix}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{booktabs} % For \toprule, \midrule, \botrule
+\usepackage{caption}  % For \caption
+\usepackage{threeparttable} % For table footnotes
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{chngcntr}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{subcaption}
+\usepackage{authblk}
+\usepackage[T1]{fontenc}    % Font encoding
+\usepackage{csquotes}       % Include csquotes
+\usepackage{diagbox}
+
+
+% Customize line spacing
+\usepackage{setspace}
+\onehalfspacing % 1.5 line spacing
+
+% Redefine section and subsection numbering format
+\usepackage{titlesec}
+\titleformat{\section} % Redefine section numbering format
+  {\normalfont\Large\bfseries}{\thesection.}{1em}{}
+  
+% Customize line numbering format to right-align line numbers
+\usepackage{lineno} % Add the lineno package
+\renewcommand\linenumberfont{\normalfont\scriptsize\sffamily\color{blue}}
+\rightlinenumbers % Right-align line numbers
+
+\linenumbers % Enable line numbering
+
+% Define a new command for the fourth-level title.
+\newcommand{\subsubsubsection}[1]{%
+  \vspace{\baselineskip}% Add some space
+  \noindent\textbf{#1\\}\quad% Adjust formatting as needed
+}
+% Change the position of the table caption above the table
+\usepackage{float}   % for customizing caption position
+\usepackage{caption} % for customizing caption format
+\captionsetup[table]{position=top} % caption position for tables
+
+% Define the unnumbered list
+\makeatletter
+\newenvironment{unlist}{%
+  \begin{list}{}{%
+    \setlength{\labelwidth}{0pt}%
+    \setlength{\labelsep}{0pt}%
+    \setlength{\leftmargin}{2em}%
+    \setlength{\itemindent}{-2em}%
+    \setlength{\topsep}{\medskipamount}%
+    \setlength{\itemsep}{3pt}%
+  }%
+}{%
+  \end{list}%
+}
+\makeatother
+
+% Suppress the warning about \@parboxrestore
+\pdfsuppresswarningpagegroup=1
+
+\begin{document}
+
+\tableofcontents
+ 
+\section{Watermark Removal}
+
+In the watermark removal phase, we first extract the visible watermark, and then remove it and recover the original BTC compressed image. the main steps are listed below.
+
+\begin{enumerate}[label=\arabic*.]
+\item Extract encrypted watermark signal $W^e_i$ from BTC codes of the watermarked image using the following equation.
+\begin{equation}
+\label{eq1}
+    W^i_e = 
+    \begin{cases}
+    0, &\text{$(x^h<x^l)$ or $(x^h == x^l$ and $q^i > 0)$}\\
+    1, &\text{$(x^h \ge x^l)$ or $(x^h==x^l$ and $q^i == 0)$}
+    \end{cases}
+\end{equation}
+\item Get the visible watermark by decrypting the encrypted watermark with the secret key.
+\item Produce the estimated mean image $I_{mean}$ and compute the visual perception factor vpf using the same methods as the watermark embedding process. Note that the same mean image and visual perception factor can be obtained during both the watermark embedding phase and the watermark removal process since it is computed based on non-watermark pixels.
+\item Remove the visible watermark (see Algorithm 1) and obtain a recovered BTC-compressed image (see Algorithm 2). The watermark removal approach can be written as
+\begin{equation}
+\label{eq3}
+    t^i_\nu = 
+    \begin{cases}
+    t^i_\nu, &\text{$W^i=1$}\\
+    {(1-\nu p f^i)t^i+\nu p f^i\times \lambda_W}, &\text{$W^i=0$, $I^i_{mean} \ge 128$}\\
+     {(1-\nu p f^i)t^i+\nu p f^i\times(255 -\lambda_W)}, &\text{$W^i=0$, $I^i_{mean}$ < 128}
+    \end{cases}
+\end{equation}
+\newline $\text{where $t \in $ \{ $x^h,x^l$ \}}$
+\begin{equation}
+\label{eq2}
+    t^i = 
+    \begin{cases}
+    t^i_\nu, &\text{$W_i=1$}\\
+    \frac{t^i_\nu-\nu p f^i \times \lambda_W}{i - \nu p f^i}, &\text{$W_i=0$, $I^i_{mean} \ge 128$}\\
+    \frac{t^i_\nu-\nu p f^i \times (255-\lambda_W)}{i - \nu p f^i}, &\text{$W_i=0$, $I^i_{mean}$ < 128}\\
+    \end{cases}
+\end{equation}
+
+\end{enumerate}
+
+\subsection{Visible Watermark Extraction}
+Given the user secret key, the proposed scheme can extract the visible watermark from the watermarked image. The detailed strategy is illustrated in Algorithm 1.
+
+
+
+\begin{algorithm}
+\caption{: Visible watermark extraction}\label{algo1}
+\begin{algorithmic}
+\State Input: $I_w$, secret key key1
+\State Initialization: $y_0=$key1, $\mu=0.3618$
+\For i = 1: m*n
+\State Extract the watermark bit $W_e$ by using \ref{eq1}.
+\If  {$W^i_e==0$}:
+\State Apply operation ($x^h$,$x^l$,$bp$)=($x^l$,$x^h$,$\overline{bp}$) and recover the watermarked image with the visible watermark Iv from the watermarked image $I_w$.
+\EndIf
+\EndFor\\
+Generate a binary sequence R.\\
+Decrypted watermark signal $W_e$ and obtain the visible watermark W by applying XOR operation to $W_e$ and R.\\
+Output: visible watermark W and the watermarked image with the visible watermark $I_v$
+
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Original Image Recovery}
+\begin{algorithm}
+\caption{: Original image recovery}\label{algo2}
+\begin{algorithmic}
+\State Input: $I_\nu$, W
+\State Initialization: $\lambda_w$
+\State According to the watermarked image Iv and the visible watermark W, generate the estimated mean image $I_{mean}$ by using Algorithm 1.
+\State The same visual perception factor $vpf$ is computed by Algorithm 2 since the same bit-planes can be obtained.
+\For {$i = 1$: $m * n$}
+    \State Remove the visible watermark and recover the original BTC-compressed image by using \ref{eq2}
+\EndFor\\
+Output: Recovered BTC-compressed image $I_{BTC}$
+\end{algorithmic}
+\end{algorithm}
+
+The same mean image can be generated based on the watermarked image with the visible watermark Iv and visible watermark by employing the total variation image restoration method. Then the same visual perception factor can be obtained since the bit-planes remain unchanged before and after watermark embedding. Therefore, the original BTC-compressed image can be recovered as depicted in Algorithm 2.
+
+\section{Experiments}
+In this section, the TVB-RVW scheme is evaluated by a series of experiments on several aspects such as the visual quality of the watermarked image, watermark visibility, robustness, and security. These experiments are conducted on some 512×512×8bits test images which range from fairly smooth images to highly textured ones. The visible watermark is a binary image with the size of 128×128 as shown in  Fig.\ref{pic.png} a. Fig.\ref{pic.png} b,c,d shows some BTC test images referred to as “Lena”, “jet”, “Baboon”, respectively. In the experiments, the parameter $\lambda_w$ is set to 50.
+\begin{itemize}
+    \item[(b)] "Lena"
+    \item[(c)] "jet"
+    \item[(d)] "Baboon"
+\end{itemize}
+\begin{figure}[!ht]
+
+\centering
+\includegraphics[width=1\linewidth]{pic.png}
+\caption{\label{pic.png}Visible watermark and some test images}
+\end{figure}
+
+\subsection{Transparency}
+Peak Signal to Noise Ratio (PSNR) values are adopted to evaluate the transparency of the BTC-compressed watermarked images produced by the TVB-RVW scheme. Figs. \ref{pic2.png} illustrate the watermarked images for some BTC-compressed images, referred to as “Lena”, “jet”, “Baboon”,
+respectively. From Fig. \ref{pic2.png}, one can observe that the watermarked images have satisfactory visual quality, which preserves the visual perceptual content of original BTC-compressed images very well.
+
+
+\subsection{Watermark Visiblity}
+Watermark visibility is one of the important attributions of visible watermarking techniques. Good watermark visibility means high contrast of the watermark content as well as the satisfactory visual quality of watermarked images. Simply, one can judge roughly the watermark visibility by observing watermark images produced by the TVB-RVW scheme as shown in Fig. \ref{pic2.png}. The visible watermark is translucent and adaptive to the content of host images with various texture types. Moreover, Fig. \ref{pic3.png} illustrates the difference images of the original BTC-compressed images and corresponding watermarked images. To provide a good visual effect, the difference images are magnified by 10 times.
+From Fig. \ref{pic3.png}, it can be noticed that the watermark strength is adaptive to the perceptual content of images.
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1\linewidth]{pic2.png}
+\caption{\label{pic2.png}Watermarked images}
+\end{figure}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1\linewidth]{pic3.png}
+\caption{\label{pic3.png}Difference images between original BTC-compressed images and watermarked images}
+\end{figure}
+
+
+\subsection{Robustness}
+Fig \ref{pic4.png} illustratestheseattackedexperimentalresultsfortheLenaBTC-compressedimage. It can be observed that one can recognize the visible watermark clearly from the attacked watermarked images. According to the experiments, these above-mentioned signal processing attacks cannot completely delete the superimposed visible watermark. So, it can be concluded that the proposed TVB-RVW scheme is robust against common signal processing attacks.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=1\linewidth]{pic4.png}
+\caption{\label{pic4.png}Robustness against common signal processing attacks. histogram equalization, Laplacian sharpening, 5×5 median filtering.}
+\end{figure}
+
+\subsection{Security}
+The PSNR values (dB) of recovery images are shown in Table.\ref{tab0}. The average PSNR value for illegal removal and legal removal is 17.33 and 58.91dB, respectively. The PSNR values for illegal removal are much lower than those for legal removal. This shows that illegal removal results for different types of images have poor visual quality and unauthorized users cannot completely delete the visible watermark by illegal watermark removal.
+
+\begin{table}[!ht]
+\caption{Visual quality of recovery images (dB)\label{tab0}}
+\begin{threeparttable}
+\begin{tabular*}{\columnwidth}{@{\extracolsep\fill}llll@{\extracolsep\fill}}
+\toprule
+Test images & Legal removal & Illegal removal\\
+\midrule
+Lena & 58.92 & 18.34 \\
+Jet & 58.79 & 15.67 \\
+Baboon &58.91	&18.10\\
+Boat	&58.82	&18.55\\
+Crowd	&59.23	&16.07\\
+Couple	&58.89	&17.82\\
+Goldhill	&58.86	&17.51\\
+Peppers	&58.83	&16.60\\
+\bottomrule
+\end{tabular*}
+\end{threeparttable}
+\end{table}
+
+\end{document}
